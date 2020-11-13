@@ -24,7 +24,7 @@ jobs:
 
       - name: get build wrapper
         run: |
-          ct /tmp
+          cd /tmp
           wget https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip
           unzip build-wrapper-linux-x86.zip
           export PATH="/tmp/build-wrapper-linux-x86:$PATH"
