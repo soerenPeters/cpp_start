@@ -27,8 +27,6 @@ jobs:
           cd /tmp
           wget https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip
           unzip build-wrapper-linux-x86.zip
-          export PATH="/tmp/build-wrapper-linux-x86:$PATH"
-
 
       # Runs a set of commands using the runners shell
       - name: build
@@ -36,9 +34,7 @@ jobs:
           mkdir build
           cd build
           cmake ..
-          echo $PATH
-          ls -la /tmp/build-wrapper-linux-x86
-          build-wrapper-linux-x86-64 --out-dir build_wrapper_output_directory make clean all
+          /tmp/build-wrapper-linux-x86-64 --out-dir build_wrapper_output_directory make clean all
 
       - name: unit-tests
         run: |
