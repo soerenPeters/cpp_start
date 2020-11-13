@@ -37,6 +37,7 @@ jobs:
           cd build
           cmake ..
           echo $PATH
+          ls -la /tmp/build-wrapper-linux-x86
           build-wrapper-linux-x86-64 --out-dir build_wrapper_output_directory make clean all
 
       - name: unit-tests
