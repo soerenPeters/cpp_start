@@ -38,12 +38,18 @@ jobs:
           mkdir build
           cd build
           cmake ..
-          make
+          build-wrapper-linux-x86-64 --out-dir build_wrapper_output_directory make clean all
 
       - name: unit-tests
         run: |
           cd build
           ctest
+
+      - name: Archive code coverage results
+          uses: actions/upload-artifact@v2
+          with:
+            name: build wrapper output
+            path: build_wrapper_output_directory
 
   sonarcloud:
     runs-on: ubuntu-latest
