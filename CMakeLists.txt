@@ -22,3 +22,7 @@ add_executable(${target_name} main.cpp)
 set(test_name appTest)
 add_executable(${test_name} test.cpp)
 target_link_libraries(${test_name} PRIVATE gmock_main)
+
+enable_testing()
+include(GoogleTest)
+gtest_add_tests(TARGET ${test_name})
