@@ -34,7 +34,7 @@ jobs:
           mkdir build
           cd build
           cmake ..
-          /tmp/build-wrapper-linux-x86-64 --out-dir build_wrapper_output_directory make clean all
+          /tmp/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir build_wrapper_output_directory make clean all
 
       - name: unit-tests
         run: |
