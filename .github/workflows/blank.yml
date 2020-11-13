@@ -28,8 +28,6 @@ jobs:
           wget https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip
           unzip build-wrapper-linux-x86.zip
           export PATH="/tmp/build-wrapper-linux-x86:$PATH"
-          printenv
-
 
 
       # Runs a set of commands using the runners shell
@@ -38,6 +36,7 @@ jobs:
           mkdir build
           cd build
           cmake ..
+          echo $PATH
           build-wrapper-linux-x86-64 --out-dir build_wrapper_output_directory make clean all
 
       - name: unit-tests
@@ -45,14 +44,11 @@ jobs:
           cd build
           ctest
 
-      - shell: bash
-        run: |
-          expr 3 + 7 > math-homework.txt
-      - name: Upload math result for job 1
+      - name: Upload build wrapper result
         uses: actions/upload-artifact@v2
         with:
-          name: homework
-          path: math-homework.txt
+          name: build_wrapper_output_directory
+          path: build/build_wrapper_output_directory
 
 
   sonarcloud:
