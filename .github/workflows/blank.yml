@@ -31,4 +31,9 @@ jobs:
           make
 
       - name: unit-tests
-        run: ctest
+        run: |
+          pwd
+          ls -la
+          cd build
+          ls -la
+          ctest
