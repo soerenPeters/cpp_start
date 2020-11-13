@@ -57,9 +57,10 @@ jobs:
           fetch-depth: 0
 
       - name: Download build wrapper result
-          uses: actions/download-artifact@v2
-          with:
-            name: build_wrapper_output_directory
+        uses: actions/download-artifact@v2
+        with:
+          name: build_wrapper_output_directory
+
 
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
