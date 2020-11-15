@@ -1,6 +1,6 @@
 #include "Adder.h"
 
-double Adder::add(double a, double b)
+double Adder::add(double a, double b) const
 {
     return a + b;
 }
