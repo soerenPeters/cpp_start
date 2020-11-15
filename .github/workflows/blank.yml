@@ -60,7 +60,9 @@ jobs:
       - name: gcov
         run: |
           mkdir coverage
-          gcovr -r $GITHUB_WORKSPACE -k build -f "src" --print-summary --html coverage/coverage.html --html-details --xml coverage/coverage.xml
+          pwd
+          ls -la
+          gcovr -r $GITHUB_WORKSPACE -k "build" -f "src" --print-summary --html coverage/coverage.html --html-details --xml coverage/coverage.xml
 
       - name: Upload gcov
         uses: actions/upload-artifact@v2
