@@ -41,29 +41,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
+      - name: Install gcov
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y gcovr
+          gcovr --version
 
-    - name: Install gcov
-      run: |
-        sudo apt-get update -y
-        sudo apt-get install -y gcovr
-        gcovr --version
+      - name: build
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DBUILD_COVERAGE=ON
+          make
+          ctest
 
-    - name: build
-      run: |
-        mkdir build
-        cd build
-        cmake .. -DBUILD_COVERAGE=ON
-        make
-        ctest
+      - name: gcov
+        run: |
+          mkdir coverage
+          gcovr -r $GITHUB_WORKSPACE -k build -f "src" --print-summary --html coverage/coverage.html --html-details --xml coverage/coverage.xml
 
-    - name: gcov
-      run: |
-        mkdir coverage
-        gcovr -r $GITHUB_WORKSPACE -k build -f "src" --print-summary --html coverage/coverage.html --html-details --xml coverage/coverage.xml
-
-    - name: Upload gcov
+      - name: Upload gcov
         uses: actions/upload-artifact@v2
         with:
           name: gcov
