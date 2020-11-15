@@ -87,10 +87,12 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: gcov
-          path: gcov/
+          path: gcov
 
       - name: get sonar scanner
         run: |
+          ls -la
+          ls -la gcov
           cd /tmp
           wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.5.0.2216-linux.zip
           unzip sonar-scanner-cli-4.5.0.2216-linux.zip
