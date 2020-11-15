@@ -33,6 +33,11 @@ set(test_name appTest)
 add_executable(${test_name} src/AdderTest.cpp)
 target_link_libraries(${test_name} PRIVATE gmock_main ${target_name})
 
+
+foreach(flag IN LISTS COMPILER_FLAG)
+    target_compile_options(${test_name} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${flag}>")
+endforeach()
+
 enable_testing()
 include(GoogleTest)
 gtest_add_tests(TARGET ${test_name})
