@@ -13,6 +13,10 @@ if (BUILD_COVERAGE AND ${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
     set(CMAKE_EXE_LINKER_FLAGS ${CMAKE_EXE_LINKER_FLAGS} " --coverage")
 endif()
 
+# windows: use multi-threaded dynamically-linked runtime library
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE) # gtest link dynamic
+
 #  googletest
 include(FetchContent)
 FetchContent_Declare(

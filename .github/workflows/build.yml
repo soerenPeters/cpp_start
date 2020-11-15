@@ -52,4 +52,3 @@ jobs:
         run: cmake --build build --config Debug
       - name: test
         run: cd build && ctest
-        
