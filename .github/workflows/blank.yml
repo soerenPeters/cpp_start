@@ -61,7 +61,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: build_wrapper_output_directory
-          path: build_wrapper_output_directory
+          path: build/build_wrapper_output_directory
 
       - name: get sonar scanner
         run: |
@@ -73,7 +73,7 @@ jobs:
       - name: debug
         run: |
           ls -la
-          ls -la build_wrapper_output_directory
+          ls -la build/build_wrapper_output_directory
           pwd
           /tmp/sonar-scanner-4.5.0.2216-linux/bin/sonar-scanner
         env:
