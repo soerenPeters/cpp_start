@@ -50,8 +50,8 @@ jobs:
 
     - name: Install gcov
       run: |
-        apt-get update
-        pip3 install gcovr
+        sudo apt-get update -y
+        sudo apt-get install -y gcovr
         gcovr --version
 
   sonarcloud:
