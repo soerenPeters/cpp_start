@@ -6,6 +6,13 @@ project(CppStart CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+option(BUILD_COVERAGE "Add the --coverage compiler flag." OFF)
+
+if (BUILD_COVERAGE AND ${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
+    message("GNU AND COVERAGE")
+    list(APPEND COMPILER_FLAG "--coverage")
+    set(CMAKE_EXE_LINKER_FLAGS ${CMAKE_EXE_LINKER_FLAGS} " --coverage")
+endif()
 
 include(FetchContent)
 FetchContent_Declare(
@@ -18,6 +25,10 @@ FetchContent_MakeAvailable(googletest)
 
 set(target_name Adder)
 add_library(${target_name} STATIC src/Adder.cpp)
+message("additional compiler flags CXX: ${COMPILER_FLAG}")
+foreach(flag IN LISTS COMPILER_FLAG)
+    target_compile_options(${target_name} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${flag}>")
+endforeach()
 
 set(test_name appTest)
 add_executable(${test_name} src/AdderTest.cpp)

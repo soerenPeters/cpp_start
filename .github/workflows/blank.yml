@@ -43,16 +43,31 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    #- name: Set up Python 3.8
-    #  uses: actions/setup-python@v2
-    #  with:
-    #    python-version: 3.8
 
     - name: Install gcov
       run: |
         sudo apt-get update -y
         sudo apt-get install -y gcovr
         gcovr --version
+
+    - name: build
+      run: |
+        mkdir build
+        cd build
+        cmake .. -DBUILD_COVERAGE=ON
+        make
+        ctest
+
+    - name: gcov
+      run: |
+        mkdir coverage
+        gcovr -r $GITHUB_WORKSPACE -k build -f "src" --print-summary --html coverage/coverage.html --html-details --xml coverage/coverage.xml
+
+    - name: Upload gcov
+        uses: actions/upload-artifact@v2
+        with:
+          name: gcov
+          path: coverage
 
   sonarcloud:
     runs-on: ubuntu-latest
