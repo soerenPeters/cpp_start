@@ -63,7 +63,7 @@ jobs:
           pwd
           ls -la
           echo $GITHUB_WORKSPACE
-          gcovr -r $GITHUB_WORKSPACE -k "build" -f "src" --print-summary --html --html-details -o coverage/coverage.html --xml coverage/coverage.xml
+          gcovr -r $GITHUB_WORKSPACE -k "build" -f "src" --print-summary --html --html-details -o coverage/coverage.html --xml -o coverage/coverage.xml
           ls -la coverage/
       # gcovr -r $GITHUB_WORKSPACE -k "build" -f "src" --print-summary --html $GITHUB_WORKSPACE/coverage/coverage.html --html-details --xml $GITHUB_WORKSPACE/coverage/coverage.xml
 
