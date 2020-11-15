@@ -63,7 +63,7 @@ jobs:
           pwd
           ls -la
           echo $GITHUB_WORKSPACE
-          gcovr -r $GITHUB_WORKSPACE -k "build" -f "src" --print-summary
+          gcovr -r $GITHUB_WORKSPACE -k "build" -f "src" --print-summary --html --html-details -o example-html-details.html
       # gcovr -r $GITHUB_WORKSPACE -k "build" -f "src" --print-summary --html $GITHUB_WORKSPACE/coverage/coverage.html --html-details --xml $GITHUB_WORKSPACE/coverage/coverage.xml
 
       - name: Upload gcov
