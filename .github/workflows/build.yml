@@ -46,14 +46,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: configure
+        run: mkdir build && cd build && cmake ..
       - name: build
-        run: |
-          mkdir build
-          cd build
-          cmake ..
-          cmake --build build --config Debug
-
-      - name: unit-tests
-        run: |
-          cd build
-          ctest
+        run: cmake --build build --config Debug
+      - name: test
+        run: cd build && ctest
+        
