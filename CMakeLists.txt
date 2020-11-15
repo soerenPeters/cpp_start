@@ -13,6 +13,7 @@ if (BUILD_COVERAGE AND ${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
     set(CMAKE_EXE_LINKER_FLAGS ${CMAKE_EXE_LINKER_FLAGS} " --coverage")
 endif()
 
+#  googletest
 include(FetchContent)
 FetchContent_Declare(
         googletest
