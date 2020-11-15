@@ -73,7 +73,7 @@ jobs:
 
   sonarcloud:
     runs-on: ubuntu-latest
-    needs: [build, gcov]
+    needs: [build_wrapper_linux, gcov]
     steps:
       - uses: actions/checkout@v2
         with:
