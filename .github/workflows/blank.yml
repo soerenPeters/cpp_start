@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
       - name: get build wrapper
@@ -38,6 +37,22 @@ jobs:
           name: build_wrapper_output_directory
           path: build/build_wrapper_output_directory
 
+  gcov:
+    uns-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    #- name: Set up Python 3.8
+    #  uses: actions/setup-python@v2
+    #  with:
+    #    python-version: 3.8
+
+    - name: Install gcov
+      run: |
+        apt-get update
+        pip3 install gcovr
+        gcovr --version
 
   sonarcloud:
     runs-on: ubuntu-latest
