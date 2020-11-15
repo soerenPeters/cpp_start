@@ -33,6 +33,25 @@ jobs:
           name: build_wrapper_output_directory
           path: build/build_wrapper_output_directory
 
+
+  build_macos:
+    runs-on: macos-11.0
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: build
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          make
+
+      - name: unit-tests
+        run: |
+          cd build
+          ctest
+###########################################################################
   gcov:
     runs-on: ubuntu-20.04
 
