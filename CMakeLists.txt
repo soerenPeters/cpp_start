@@ -16,12 +16,12 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(googletest)
 
-set(target_name app)
-add_executable(${target_name} main.cpp)
+set(target_name Adder)
+add_library(${target_name} STATIC src/Adder.cpp)
 
 set(test_name appTest)
-add_executable(${test_name} test.cpp)
-target_link_libraries(${test_name} PRIVATE gmock_main)
+add_executable(${test_name} src/AdderTest.cpp)
+target_link_libraries(${test_name} PRIVATE gmock_main ${target_name})
 
 enable_testing()
 include(GoogleTest)
