@@ -66,6 +66,7 @@ jobs:
         run: |
           ls -la
           ls -la build_wrapper_output_directory
+          pwd
 
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
