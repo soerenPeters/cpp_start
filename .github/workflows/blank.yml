@@ -59,18 +59,14 @@ jobs:
 
       - name: gcov
         run: |
-          mkdir coverage
-          pwd
-          ls -la
-          echo $GITHUB_WORKSPACE
-          gcovr -r $GITHUB_WORKSPACE -k "build" -f "src" --print-summary --xml -o gcov.xml
-      # gcovr -r $GITHUB_WORKSPACE -k "build" -f "src" --print-summary --html $GITHUB_WORKSPACE/coverage/coverage.html --html-details --xml $GITHUB_WORKSPACE/coverage/coverage.xml
+          mkdir gcov
+          gcovr -r $GITHUB_WORKSPACE -k "build" -f "src" --print-summary --html gcov/coverage.html --html-details --xml gcov/coverage.xml
 
       - name: Upload gcov
         uses: actions/upload-artifact@v2
         with:
           name: gcov
-          path: gcov.xml
+          path: gcov/
 
   sonarcloud:
     runs-on: ubuntu-latest
@@ -91,7 +87,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: gcov
-          path: gcov.xml
+          path: gcov/
 
       - name: get sonar scanner
         run: |
