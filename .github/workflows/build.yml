@@ -51,7 +51,6 @@ jobs:
           mkdir build
           cd build
           cmake ..
-          ls -la
           cmake --build build --config Debug
 
       - name: unit-tests
