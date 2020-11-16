@@ -87,6 +87,9 @@ jobs:
           cmakeoptions: '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON'
           outputfile: 'clangtidy.txt'
 
+      - name: debug
+        run: ls -la
+
       - name: Upload clang-tidy
         uses: actions/upload-artifact@v2
         with:
