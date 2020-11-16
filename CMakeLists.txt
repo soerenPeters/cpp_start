@@ -6,8 +6,11 @@ project(CppStart CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Options
 option(BUILD_COVERAGE "Add the --coverage compiler flag." OFF)
 option(BUILD_CLANG_TIDY "Enable clang-tidy checks." OFF)
+
+include(CMake/build_utilities.cmake)
 
 if (BUILD_COVERAGE AND ${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
     list(APPEND COMPILER_FLAG "--coverage")
@@ -28,36 +31,13 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(googletest)
 
-set(target_name Adder)
-add_library(${target_name} STATIC src/Adder.cpp)
-message("additional compiler flags CXX: ${COMPILER_FLAG}")
-foreach(flag IN LISTS COMPILER_FLAG)
-    target_compile_options(${target_name} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${flag}>")
-endforeach()
-
-set(test_name appTest)
-add_executable(${test_name} src/AdderTest.cpp)
-target_link_libraries(${test_name} PRIVATE gmock_main ${target_name})
-
-
-foreach(flag IN LISTS COMPILER_FLAG)
-    target_compile_options(${test_name} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${flag}>")
-endforeach()
-
 enable_testing()
 include(GoogleTest)
-gtest_add_tests(TARGET ${test_name})
 
-if(BUILD_CLANG_TIDY)
-    find_program(CLANG_TIDY_PROGRAM NAMES clang-tidy)
 
-    if(NOT CLANG_TIDY_PROGRAM)
-        message(FATAL_ERROR "Could not find the program clang-tidy.")
-    endif()
+list(APPEND COMPILER_FLAG -Wall)
 
-    set_target_properties(${target_name}
-            PROPERTIES
-            CXX_CLANG_TIDY ${CLANG_TIDY_PROGRAM})
 
-    message("clang-tidy enabled")
-endif()
+add_target(NAME Adder BUILDTYPE static FILES src/Adder.cpp)
+
+util_add_test(NAME appTest PRIVATE_LINK Adder FILES src/AdderTest.cpp)
