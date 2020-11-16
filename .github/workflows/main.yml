@@ -76,22 +76,22 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: configure
-        run: |
-          mkdir build && cd build
-          cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-
-      - name: run clang-tidy
-        run: |
-          cd build
-          run-clang-tidy -h
-          run-clang-tidy -quiet > clangtidy.txt
+      - name: Run clang-tidy
+        uses: soerenPeters/action-clang-tidy@1.2
+        # These are optional (defaults displayed)
+        with:
+          scandir: '.'
+          builddir: 'build'
+          excludedirs: ''
+          extensions: 'c,h,C,H,cpp,hpp,cc,hh,c++,h++,cxx,hxx'
+          cmakeoptions: '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON'
+          outputfile: 'clangtidy.txt'
 
       - name: Upload clang-tidy
         uses: actions/upload-artifact@v2
         with:
           name: clang-tidy
-          path: build/clangtidy.txt
+          path: clangtidy.txt
 
 ###########################################################################
   sonarcloud:
