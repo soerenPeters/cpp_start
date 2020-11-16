@@ -1,0 +1,26 @@
+---
+Checks: '
+-*,
+
+bugprone-*
+
+misc-*,
+
+modernize-*,
+-modernize-use-trailing-return-type,
+-modernize-use-nodiscard,
+
+mpi-*,
+
+openmp-*
+
+performance-*,
+
+portability-*
+
+readability-*,
+
+cppcoreguidelines-*,
+'
+HeaderFilterRegex: '\.h$'
+...

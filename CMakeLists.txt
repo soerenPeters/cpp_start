@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(BUILD_COVERAGE "Add the --coverage compiler flag." OFF)
+option(BUILD_CLANG_TIDY "Enable clang-tidy checks." OFF)
 
 if (BUILD_COVERAGE AND ${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
     list(APPEND COMPILER_FLAG "--coverage")
@@ -46,3 +47,17 @@ endforeach()
 enable_testing()
 include(GoogleTest)
 gtest_add_tests(TARGET ${test_name})
+
+if(BUILD_CLANG_TIDY)
+    find_program(CLANG_TIDY_PROGRAM NAMES clang-tidy)
+
+    if(NOT CLANG_TIDY_PROGRAM)
+        message(FATAL_ERROR "Could not find the program clang-tidy.")
+    endif()
+
+    set_target_properties(${target_name}
+            PROPERTIES
+            CXX_CLANG_TIDY ${CLANG_TIDY_PROGRAM})
+
+    message("clang-tidy enabled")
+endif()
