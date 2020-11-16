@@ -85,13 +85,15 @@ jobs:
           cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
       - name: run clang-tidy
-        run: cd build && run-clang-tidy -quiet > clangtidy.txt && ls -la
+        run: cd build && run-clang-tidy -quiet > clangtidy.txt
 
       - name: Upload clang-tidy
         uses: actions/upload-artifact@v2
         with:
           name: clang-tidy
-          path: build/clangtidy.txt
+          path: |
+            build/clangtidy.txt
+            build/compile_commands.json
 
 ###########################################################################
   sonarcloud:
