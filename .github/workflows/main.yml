@@ -88,13 +88,13 @@ jobs:
           outputfile: 'clangtidy.txt'
 
       - name: debug
-        run: ls -la
+        run: ls -la build
 
       - name: Upload clang-tidy
         uses: actions/upload-artifact@v2
         with:
           name: clang-tidy
-          path: clangtidy.txt
+          path: build/clangtidy.txt
 
 ###########################################################################
   sonarcloud:
