@@ -72,23 +72,17 @@ jobs:
           path: gcov/
 ###########################################################################
   clang-tidy:
-    runs-on: ubuntu-latest
+    runs-on: bssoeren/cpp_build_starter:latest
     steps:
       - uses: actions/checkout@v2
 
-      - name: Run clang-tidy
-        uses: soerenPeters/action-clang-tidy@1.2
-        # These are optional (defaults displayed)
-        with:
-          scandir: '.'
-          builddir: 'build'
-          excludedirs: ''
-          extensions: 'c,h,C,H,cpp,hpp,cc,hh,c++,h++,cxx,hxx'
-          cmakeoptions: '-DCMAKE_EXPORT_COMPILE_COMMANDS=ON'
-          outputfile: 'clangtidy.txt'
+      - name: configure
+        run: |
+          mkdir build && cd build
+          cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
-      - name: debug
-        run: ls -la build
+      - name: run clang-tidy
+        run: cd build && run-clang-tidy -quiet > clangtidy.txt && ls -la build
 
       - name: Upload clang-tidy
         uses: actions/upload-artifact@v2
