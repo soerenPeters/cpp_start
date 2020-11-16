@@ -72,7 +72,10 @@ jobs:
           path: gcov/
 ###########################################################################
   clang-tidy:
-    runs-on: bssoeren/cpp_build_starter:latest
+    runs-on: ubuntu-20.04
+
+    container:
+      image: bssoeren/cpp_build_starter:latest
     steps:
       - uses: actions/checkout@v2
 
