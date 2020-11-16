@@ -85,7 +85,7 @@ jobs:
           cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
       - name: run clang-tidy
-        run: cd build && run-clang-tidy -quiet > clangtidy.txt && ls -la build
+        run: cd build && run-clang-tidy -quiet > clangtidy.txt && ls -la
 
       - name: Upload clang-tidy
         uses: actions/upload-artifact@v2
