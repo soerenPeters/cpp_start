@@ -70,7 +70,30 @@ jobs:
         with:
           name: gcov
           path: gcov/
+###########################################################################
+  clang-tidy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
 
+      - name: configure
+        run: |
+          mkdir build && cd build
+          cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+
+      - name: run clang-tidy
+        run: |
+          cd build
+          run-clang-tidy -h
+          run-clang-tidy -quiet > clangtidy.txt
+
+      - name: Upload clang-tidy
+        uses: actions/upload-artifact@v2
+        with:
+          name: clang-tidy
+          path: build/clangtidy.txt
+
+###########################################################################
   sonarcloud:
     runs-on: ubuntu-latest
     needs: [build_wrapper_linux, gcov]
