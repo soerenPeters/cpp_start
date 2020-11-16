@@ -1,43 +1,12 @@
 cmake_minimum_required(VERSION 3.14)
 
-
 project(CppStart CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Options
-option(BUILD_COVERAGE "Add the --coverage compiler flag." OFF)
-option(BUILD_CLANG_TIDY "Enable clang-tidy checks." OFF)
-
-include(CMake/build_utilities.cmake)
-
-if (BUILD_COVERAGE AND ${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
-    list(APPEND COMPILER_FLAG "--coverage")
-    set(CMAKE_EXE_LINKER_FLAGS ${CMAKE_EXE_LINKER_FLAGS} " --coverage")
-endif()
-
-# windows: use multi-threaded dynamically-linked runtime library
-set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE) # gtest link dynamic
-
-#  googletest
-include(FetchContent)
-FetchContent_Declare(
-        googletest
-        GIT_REPOSITORY https://github.com/google/googletest.git
-        GIT_TAG        release-1.10.0
-)
-
-FetchContent_MakeAvailable(googletest)
-
-enable_testing()
-include(GoogleTest)
-
+include(CMake/cpp_starter.cmake)
 
 list(APPEND COMPILER_FLAG -Wall)
 
-
-add_target(NAME Adder BUILDTYPE static FILES src/Adder.cpp)
-
-util_add_test(NAME appTest PRIVATE_LINK Adder FILES src/AdderTest.cpp)
+add_subdirectory(src)
