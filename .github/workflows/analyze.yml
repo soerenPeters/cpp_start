@@ -9,37 +9,6 @@ on:
       - main
 
 jobs:
-  build_wrapper_linux:
-    runs-on: ubuntu-20.04
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: get build wrapper
-        run: |
-          cd /tmp
-          wget https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip
-          unzip build-wrapper-linux-x86.zip
-
-      - name: build
-        run: |
-          mkdir build
-          cd build
-          cmake ..
-          /tmp/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir build_wrapper_output_directory make clean all
-
-      - name: unit-tests
-        run: |
-          cd build
-          ctest
-
-      - name: Upload build wrapper result
-        uses: actions/upload-artifact@v2
-        with:
-          name: build_wrapper_output_directory
-          path: build/build_wrapper_output_directory
-
-  ###########################################################################
   gcov:
     runs-on: ubuntu-20.04
 
@@ -123,7 +92,7 @@ jobs:
           wget https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip
           unzip build-wrapper-linux-x86.zip
 
-      - name: build
+      - name: build with build-wrapper
         run: |
           mkdir build
           cd build
