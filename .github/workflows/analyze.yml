@@ -105,12 +105,6 @@ jobs:
           # Disabling shallow clone is recommended for improving relevancy of reporting
           fetch-depth: 0
 
-      - name: Download build wrapper result
-        uses: actions/download-artifact@v2
-        with:
-          name: build_wrapper_output_directory
-          path: build/build_wrapper_output_directory
-
       - name: Download gcov result
         uses: actions/download-artifact@v2
         with:
@@ -122,6 +116,19 @@ jobs:
           cd /tmp
           wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.5.0.2216-linux.zip
           unzip sonar-scanner-cli-4.5.0.2216-linux.zip
+
+      - name: get build wrapper
+        run: |
+          cd /tmp
+          wget https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip
+          unzip build-wrapper-linux-x86.zip
+
+      - name: build
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+          /tmp/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir build_wrapper_output_directory make clean all
 
       - name: run sonar scanner
         run: |
