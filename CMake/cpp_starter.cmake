@@ -16,7 +16,7 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
 
 # code coverage gcov
 if (BUILD_COVERAGE AND ${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
-    list(APPEND COMPILER_FLAG "--coverage")
+    list(APPEND COMPILER_FLAGS_CXX "--coverage")
     set(CMAKE_EXE_LINKER_FLAGS ${CMAKE_EXE_LINKER_FLAGS} " --coverage")
 endif()
 
