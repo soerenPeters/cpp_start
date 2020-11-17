@@ -104,6 +104,7 @@ function(_add_target)
 
     status("Configure target: ${ARG_NAME} (${ARG_BUILDTYPE})...")
 
+
     # Create the target
     if(${ARG_BUILDTYPE} MATCHES executable)
         add_executable(${ARG_NAME} ${ARG_FILES} )
@@ -115,6 +116,7 @@ function(_add_target)
         message(FATAL_ERROR "build_type=${ARG_BUILDTYPE} doesn't match executable, shared or static")
     endif()
 
+
     # Set the output directory for build artifacts
     set_target_properties(${ARG_NAME}
             PROPERTIES
@@ -122,6 +124,11 @@ function(_add_target)
             LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
             ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
             PDB_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+
+
+    #includes
+    target_include_directories(${ARG_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+    target_include_directories(${ARG_NAME} PRIVATE ${CMAKE_BINARY_DIR})
 
 
     # link libraries
@@ -134,13 +141,57 @@ function(_add_target)
         target_link_libraries(${ARG_NAME} PRIVATE ${ARG_PRIVATE_LINK})
     endif()
 
+    status_lib("additional compiler flags CXX: ${COMPILER_FLAGS_CXX}")
+    status_lib("additional compiler flags CXX DEBUG: ${COMPILER_FLAGS_CXX_DEBUG}")
+    status_lib("additional compiler flags CXX RELEASE: ${COMPILER_FLAGS_CXX_RELEASE}")
+
+    status_lib("compile definitions: ${COMPILER_DEFINITION}")
+    status_lib("link options: ${LINK_OPTIONS}")
+
     # compiler flags
-    status_lib("additional compiler flags CXX: ${COMPILER_FLAG}")
-    foreach(flag IN LISTS COMPILER_FLAG)
+    foreach(flag IN LISTS COMPILER_FLAGS_CXX)
         target_compile_options(${ARG_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${flag}>")
     endforeach()
+
+    foreach(flag IN LISTS COMPILER_FLAGS_CXX_DEBUG)
+        target_compile_options(${ARG_NAME} PRIVATE "$<$<AND:$<COMPILE_LANGUAGE:CXX>,$<CONFIG:DEBUG>>:${flag}>")
+    endforeach()
+
+    foreach(flag IN LISTS COMPILER_FLAGS_CXX_RELEASE)
+        target_compile_options(${ARG_NAME} PRIVATE "$<$<AND:$<COMPILE_LANGUAGE:CXX>,$<CONFIG:RELEASE>>:${flag}>")
+    endforeach()
+
+    # compile definitions
+    foreach(flag IN LISTS COMPILER_DEFINITION)
+        target_compile_definitions(${library_name} PRIVATE ${flag})
+    endforeach()
+
+    # link options
+    foreach(flag IN LISTS LINK_OPTIONS)
+        target_link_options(${library_name} PRIVATE ${flag})
+    endforeach()
+
+    # export header
+    #if (${ARG_BUILDTYPE} MATCHES shared)
+    #    generateExportHeader (${ARG_NAME})
+    #endif()
 
 
     status("..done.")
 
 endfunction()
+
+
+
+######################################################################################################################
+## Load additional compiler flags                                                                                   ##
+## the file needs to be named after one of the following compiler with file ending *.cmake:                         ##
+## https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_ID.html#variable:CMAKE_<LANG>_COMPILER_ID       ##
+######################################################################################################################
+if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/compilerflags/${CMAKE_CXX_COMPILER_ID}.cmake")
+    status("Load compiler file: ${CMAKE_CXX_COMPILER_ID}.cmake")
+    include(${CMAKE_CURRENT_LIST_DIR}/compilerflags/${CMAKE_CXX_COMPILER_ID}.cmake)
+else()
+    status("${CMAKE_CXX_COMPILER_ID}.cmake file not found.")
+endif()
+
