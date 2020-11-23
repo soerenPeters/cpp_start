@@ -1,4 +1,4 @@
-set(buildInfoPath ${CMAKE_BINARY_DIR}/buildInfo)
+set(buildInfoPath ${CMAKE_BINARY_DIR}/projectInfo)
 set(buildInfoFile git.cpp)
 set(buildInfoInput ${CMAKE_CURRENT_LIST_DIR}/git.in.cpp)
 set(buildInfoSourceFile ${buildInfoPath}/${buildInfoFile})
