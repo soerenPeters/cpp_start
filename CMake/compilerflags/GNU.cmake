@@ -11,3 +11,4 @@ list(APPEND COMPILER_FLAGS_CXX_RELEASE -O3) # optimization level (-O3: most opti
 
 # warning level
 list(APPEND COMPILER_FLAGS_CXX -Wall)
+list(APPEND COMPILER_FLAGS_CXX -Wextra)
