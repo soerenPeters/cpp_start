@@ -35,11 +35,11 @@ The following cmake lists will be set as private properties for each target:
 ## Github workflow:
  - build
    - Linux - gnu
-   - MacOs - clang
+   - MacOS - clang
    - Windows - msvc
  - analyse
      - code coverage [gcovr](https://gcovr.com/en/stable/)
-     - clang-tidy analysis
+     - [clang-tidy](https://clang.llvm.org/extra/clang-tidy/) analysis
      - deployment to [sonarcloud.io](https://sonarcloud.io/dashboard?id=soerenPeters_cpp_start)
  
  
