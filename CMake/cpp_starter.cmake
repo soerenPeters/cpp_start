@@ -8,7 +8,7 @@ option(BUILD_CLANG_TIDY "Enable clang-tidy checks." OFF)
 option(BUILD_UNIT_TESTS "Add the unit test targets." ON)
 option(BUILD_WARNINGS_AS_ERRORS "Make all warnings into errors." OFF)
 
-include(CMake/build_utilities.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/build_utilities.cmake)
 
 # windows: use multi-threaded dynamically-linked runtime library
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
