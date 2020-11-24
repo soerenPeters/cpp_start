@@ -26,7 +26,7 @@ jobs:
       - name: gcov
         run: |
           mkdir gcov
-          gcovr -r $GITHUB_WORKSPACE -k "build" -f "./" --print-summary --html gcov/coverage.html --html-details --xml gcov/coverage.xml --sonarqube gcov/sonarqube.xml
+          gcovr "build" -r $GITHUB_WORKSPACE -k -f "src" -f "build/projectInfo" --print-summary --html gcov/coverage.html --html-details --xml gcov/coverage.xml --sonarqube gcov/sonarqube.xml
 
       - name: Upload gcov
         uses: actions/upload-artifact@v2
