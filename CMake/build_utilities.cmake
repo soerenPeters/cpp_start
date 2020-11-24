@@ -141,6 +141,9 @@ function(_add_target)
         target_link_libraries(${ARG_NAME} PRIVATE ${ARG_PRIVATE_LINK})
     endif()
 
+    # link spdlog
+    target_link_libraries(${ARG_NAME} PRIVATE spdlog)
+
     status_lib("additional compiler flags CXX: ${COMPILER_FLAGS_CXX}")
     status_lib("additional compiler flags CXX DEBUG: ${COMPILER_FLAGS_CXX_DEBUG}")
     status_lib("additional compiler flags CXX RELEASE: ${COMPILER_FLAGS_CXX_RELEASE}")

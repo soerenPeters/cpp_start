@@ -1,9 +1,7 @@
 #include <gmock/gmock.h>
+#include <spdlog/spdlog.h>
 
 #include "meta.h"
-
-#include <iostream>
-#include <cstring>
 
 
 TEST(MetaTest, getGitRevision)
@@ -12,7 +10,7 @@ TEST(MetaTest, getGitRevision)
 
     ASSERT_TRUE(gitBranch);
 
-    std::cout << gitBranch << "\n";
+    spdlog::info("Git Branch: {0}", gitBranch);
 }
 
 TEST(MetaTest, getGitCommitHash)
@@ -24,7 +22,7 @@ TEST(MetaTest, getGitCommitHash)
     // git commit hash length: 40 characters.
     EXPECT_THAT(strlen(gitCommitHash), testing::Eq(40));
 
-    std::cout << gitCommitHash << "\n";
+    spdlog::info("Git commit hash: {0}", gitCommitHash);
 }
 
 TEST(MetaTest, getBuildType)
@@ -33,7 +31,7 @@ TEST(MetaTest, getBuildType)
 
     EXPECT_TRUE(buildType);
 
-    std::cout << buildType << "\n";
+    spdlog::info("Build type: {0}", buildType);
 }
 
 TEST(MetaTest, getSourceDir)
@@ -42,7 +40,7 @@ TEST(MetaTest, getSourceDir)
 
     EXPECT_TRUE(sourceDir);
 
-    std::cout << sourceDir << "\n";
+    spdlog::info("Source directory: {0}", sourceDir);
 }
 
 TEST(MetaTest, getBinaryDir)
@@ -51,5 +49,5 @@ TEST(MetaTest, getBinaryDir)
 
     EXPECT_TRUE(binaryDir);
 
-    std::cout << binaryDir << "\n";
+    spdlog::info("Binary directory: {0}", binaryDir);
 }
