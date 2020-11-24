@@ -56,7 +56,8 @@ There are dependencies on the following projects. These are fetched into the bui
 -  unit test framework [googletest](https://github.com/google/googletest)
 -  logging framework [spdlog](https://github.com/gabime/spdlog)
 
-## Add new targets
+## Usage
+### Add new targets
 - create a new folder in the src/ directory (e.g. by copying the adder directory.)
 - add a new CMakeLists.txt file and the corresponding source and test files
 ```cmake
@@ -73,9 +74,23 @@ set(TEST_FILES
 
 set(PUBLIC_LINK)
 
-
 add_target(BUILDTYPE static)
 ```
 - add an add_subdirectory() in the root CMakeLists.txt
 
 If the option BUILD_UNIT_TESTS is set to ON and TEST_FILES are added in the CMakeLists, cmake will create a test executable target with the name <my_target_name>Test and add it to ctest.
+
+### Use in other projects
+This cmake template can easily be used in other projects:
+```cmake
+include(FetchContent)
+FetchContent_Declare(
+        cpp_start
+        GIT_REPOSITORY https://github.com/soerenpeters/cpp_start.git
+        GIT_TAG        v0.1-alpha
+)
+FetchContent_Populate(cpp_start)
+
+include(${CMAKE_BINARY_DIR}/_deps/cpp_start-src/CMake/cpp_starter.cmake)
+```
+An example usage can be found [here](https://github.com/soerenPeters/cpp_start_example).
