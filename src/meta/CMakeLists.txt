@@ -6,7 +6,7 @@ set(TARGET_NAME
         meta)
 
 set(SOURCE_FILES
-        ${buildInfoSourceFile})
+        ${metaSourceFile})
 
 set(TEST_FILES
         test_meta.cpp)
