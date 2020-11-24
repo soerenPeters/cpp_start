@@ -8,7 +8,7 @@
 
 TEST(GitTest, getGitRevision)
 {
-    auto gitBranch = buildInfo::gitBranch();
+    auto gitBranch = meta::gitBranch();
 
     ASSERT_TRUE(gitBranch);
 
@@ -18,7 +18,7 @@ TEST(GitTest, getGitRevision)
 
 TEST(GitTest, getGitCommitHash)
 {
-    auto gitCommitHash = buildInfo::gitCommitHash();
+    auto gitCommitHash = meta::gitCommitHash();
 
     EXPECT_TRUE(gitCommitHash);
     EXPECT_THAT(strlen(gitCommitHash), testing::Eq(40)); // git commit hash length: 40 characters.
