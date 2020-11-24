@@ -9,7 +9,7 @@ set(SOURCE_FILES
         ${buildInfoPath}/${buildInfoFile})
 
 set(TEST_FILES
-        gitTest.cpp)
+        test_git.cpp)
 
 set(PUBLIC_LINK)
 

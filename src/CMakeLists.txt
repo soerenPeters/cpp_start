@@ -7,7 +7,7 @@ set(SOURCE_FILES
         Adder.cpp)
 
 set(TEST_FILES
-        AdderTest.cpp)
+        test_adder.cpp)
 
 set(PUBLIC_LINK)
 
