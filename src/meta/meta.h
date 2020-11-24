@@ -1,7 +1,7 @@
-#ifndef buildInfo_H
-#define buildInfo_H
+#ifndef meta_H
+#define meta_H
 
-namespace buildInfo
+namespace meta
 {
 const char *gitCommitHash();
 const char *gitBranch();

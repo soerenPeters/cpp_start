@@ -1,7 +1,6 @@
-#include "git.h"
+#include "meta.h"
 
-
-namespace buildInfo
+namespace meta
 {
 const char *gitCommitHash() { return "@git_commit_hash@"; }
 const char *gitBranch() { return "@git_branch@"; }

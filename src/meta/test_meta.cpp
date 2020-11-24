@@ -1,6 +1,6 @@
 #include <gmock/gmock.h>
 
-#include "git.h"
+#include "meta.h"
 
 #include <iostream>
 #include <string.h>

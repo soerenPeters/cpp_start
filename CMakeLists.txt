@@ -15,4 +15,4 @@ include(CMake/cpp_starter.cmake)
 
 
 add_subdirectory(src/adder)
-add_subdirectory(src/info)
+add_subdirectory(src/meta)
