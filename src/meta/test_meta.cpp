@@ -8,46 +8,48 @@
 
 TEST(MetaTest, getGitRevision)
 {
-    auto gitBranch = meta::gitBranch();
+    const auto* gitBranch = meta::gitBranch();
 
     ASSERT_TRUE(gitBranch);
 
-    std::cout << gitBranch << std::endl;
+    std::cout << gitBranch << "\n";
 }
 
 TEST(MetaTest, getGitCommitHash)
 {
-    auto gitCommitHash = meta::gitCommitHash();
+    const auto* gitCommitHash = meta::gitCommitHash();
 
     EXPECT_TRUE(gitCommitHash);
-    EXPECT_THAT(strlen(gitCommitHash), testing::Eq(40)); // git commit hash length: 40 characters.
 
-    std::cout << gitCommitHash << std::endl;
+    // git commit hash length: 40 characters.
+    EXPECT_THAT(strlen(gitCommitHash), testing::Eq(40));
+
+    std::cout << gitCommitHash << "\n";
 }
 
 TEST(MetaTest, getBuildType)
 {
-    auto buildType = meta::buildType();
+    const auto* buildType = meta::buildType();
 
     EXPECT_TRUE(buildType);
 
-    std::cout << buildType << std::endl;
+    std::cout << buildType << "\n";
 }
 
 TEST(MetaTest, getSourceDir)
 {
-    auto sourceDir = meta::sourceDir();
+    const auto* sourceDir = meta::sourceDir();
 
     EXPECT_TRUE(sourceDir);
 
-    std::cout << sourceDir << std::endl;
+    std::cout << sourceDir << "\n";
 }
 
 TEST(MetaTest, getBinaryDir)
 {
-    auto binaryDir = meta::binaryDir();
+    const auto* binaryDir = meta::binaryDir();
 
     EXPECT_TRUE(binaryDir);
 
-    std::cout << binaryDir << std::endl;
+    std::cout << binaryDir << "\n";
 }

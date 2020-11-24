@@ -1,5 +1,5 @@
-#ifndef meta_H
-#define meta_H
+#ifndef META_H
+#define META_H
 
 namespace meta
 {

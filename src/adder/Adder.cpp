@@ -1,6 +1,8 @@
 #include "Adder.h"
 
-double Adder::add(double a, double b) const
+namespace myapi
 {
-    return a + b;
+
+double Adder::add(double a, double b) const { return a + b; }
+
 }
