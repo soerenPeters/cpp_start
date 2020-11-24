@@ -9,8 +9,7 @@ TEST(MetaTest, getGitRevision)
     const auto* gitBranch = meta::gitBranch();
 
     ASSERT_TRUE(gitBranch);
-
-    std::cout << gitBranch << "\n";
+    
     spdlog::info("Git Branch: {0}", gitBranch);
 }
 
