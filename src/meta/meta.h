@@ -1,14 +1,15 @@
 #ifndef META_H
 #define META_H
 
+#include "meta_export.h"
 
 namespace meta
 {
-const char *gitCommitHash();
-const char *gitBranch();
-const char *buildType();
-const char *sourceDir();
-const char *binaryDir();
+META_EXPORT const char *gitCommitHash();
+META_EXPORT const char *gitBranch();
+META_EXPORT const char *buildType();
+META_EXPORT const char *sourceDir();
+META_EXPORT const char *binaryDir();
 }
 
 #endif
