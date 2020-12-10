@@ -21,7 +21,8 @@ portability-*
 readability-*,
 
 cppcoreguidelines-*,
--cppcoreguidelines-avoid-c-arrays
+-cppcoreguidelines-avoid-c-arrays,
+-cppcoreguidelines-macro-usage
 '
 HeaderFilterRegex: '\.h$'
 ...

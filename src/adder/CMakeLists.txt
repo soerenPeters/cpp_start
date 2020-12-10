@@ -11,5 +11,7 @@ set(TEST_FILES
 
 set(PUBLIC_LINK)
 
+set(PRIVATE_LINK)
 
-add_target(BUILDTYPE static)
+
+add_target()

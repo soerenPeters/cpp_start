@@ -13,32 +13,39 @@ function(status_lib msg)
     endif()
 endfunction()
 
+include (GenerateExportHeader)
+function(generateExportHeader target_name)
+    GENERATE_EXPORT_HEADER	(${target_name}
+            EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/${target_name}_export.h
+            )
+endfunction(generateExportHeader)
+
 #################################################################################
-## Add a target, link the libraries and add the compiler flags to the target
-##
-## parameter:
-## NAME      - Name of the target.
-## BUILDTYPE - STATIC; SHARED; EXECUTABLE
-## PUBLIC_LINK  - public libraries to link
-## PRIVATE_LINK - private libraries to link
-## FILES     - adds these files to the target
-##
+## Add a target with the name TARGET_NAME and add SOURCE_FILES.
+## Link the libraries PUBLIC_LINK and PRIVATE_LINK and add compiler flags to the target.
+## If TEST_FILES are set a test executable is build.
+## Activates clang-tidy if set.
 #################################################################################
 function(add_target)
 
-    set( options )
-    set( oneValueArgs BUILDTYPE)
-    set( multiValueArgs )
-    cmake_parse_arguments( ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
+    if(NOT DEFINED BUILDTYPE)
+        if(BUILD_SHARED_LIBS)
+            set(BUILDTYPE "shared")
+        else()
+            set(BUILDTYPE "static")
+        endif()
+    endif()
 
     _add_target(
             NAME ${TARGET_NAME}
-            BUILDTYPE ${ARG_BUILDTYPE}
+            BUILDTYPE ${BUILDTYPE}
             PUBLIC_LINK ${PUBLIC_LINK}
             PRIVATE_LINK ${PRIVATE_LINK}
             FILES ${SOURCE_FILES})
 
-    _add_test()
+    if(DEFINED TEST_FILES)
+        _add_test()
+    endif()
 
     # clang-tidy
     if(BUILD_CLANG_TIDY)
@@ -166,18 +173,18 @@ function(_add_target)
 
     # compile definitions
     foreach(flag IN LISTS COMPILER_DEFINITION)
-        target_compile_definitions(${library_name} PRIVATE ${flag})
+        target_compile_definitions(${ARG_NAME} PRIVATE ${flag})
     endforeach()
 
     # link options
     foreach(flag IN LISTS LINK_OPTIONS)
-        target_link_options(${library_name} PRIVATE ${flag})
+        target_link_options(${ARG_NAME} PRIVATE ${flag})
     endforeach()
 
     # export header
-    #if (${ARG_BUILDTYPE} MATCHES shared)
-    #    generateExportHeader (${ARG_NAME})
-    #endif()
+    if (${ARG_BUILDTYPE} MATCHES shared OR ${ARG_BUILDTYPE} MATCHES static)
+        generateExportHeader (${ARG_NAME})
+    endif()
 
 
     status("..done.")
