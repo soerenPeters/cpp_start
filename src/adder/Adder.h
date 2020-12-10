@@ -1,7 +1,7 @@
 #ifndef CPPSTART_ADDER_H
 #define CPPSTART_ADDER_H
 
-#include "Adder_export.h"
+#include "adder_export.h"
 
 namespace myapi
 {

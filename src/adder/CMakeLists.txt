@@ -1,7 +1,7 @@
 project(Adder CXX)
 
 set(TARGET_NAME
-        Adder)
+        adder)
 
 set(SOURCE_FILES
         Adder.cpp)
