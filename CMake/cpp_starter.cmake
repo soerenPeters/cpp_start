@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.15)
 
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER ".cmake")
+
 # options
 option(CMAKE_VERBOSE_OUTPUT "Enable additional CMake output per target." ON)
 
@@ -9,6 +12,14 @@ option(BUILD_UNIT_TESTS "Add the unit test targets." ON)
 option(BUILD_WARNINGS_AS_ERRORS "Make all warnings into errors." OFF)
 
 option(BUILD_SHARED_LIBS "Build all targets as shared libs in this project." ON)
+
+
+# vars
+set(lib_folder "libs")
+set(app_folder "apps")
+set(test_folder "tests")
+set(third_folder "3rd")
+
 
 include(${CMAKE_CURRENT_LIST_DIR}/build_utilities.cmake)
 
@@ -38,6 +49,11 @@ if(BUILD_UNIT_TESTS)
 
     FetchContent_MakeAvailable(googletest)
 
+    set_target_properties(gmock PROPERTIES FOLDER ${third_folder})
+    set_target_properties(gmock_main PROPERTIES FOLDER ${third_folder})
+    set_target_properties(gtest PROPERTIES FOLDER ${third_folder})
+    set_target_properties(gtest_main PROPERTIES FOLDER ${third_folder})
+
     enable_testing()
     include(GoogleTest)
 endif()
@@ -51,3 +67,5 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(spdlog)
+
+set_target_properties(spdlog PROPERTIES FOLDER ${third_folder})

@@ -86,6 +86,8 @@ function(_add_test)
 
     gtest_add_tests(TARGET ${test_name})
 
+    set_target_properties(${test_name} PROPERTIES FOLDER ${test_folder})
+
 endfunction()
 
 
@@ -115,10 +117,13 @@ function(_add_target)
     # Create the target
     if(${ARG_BUILDTYPE} MATCHES executable)
         add_executable(${ARG_NAME} ${ARG_FILES} )
+        set_target_properties(${ARG_NAME} PROPERTIES FOLDER ${app_folder})
     elseif(${ARG_BUILDTYPE} MATCHES shared)
         add_library(${ARG_NAME} SHARED ${ARG_FILES} )
+        set_target_properties(${ARG_NAME} PROPERTIES FOLDER ${lib_folder})
     elseif(${ARG_BUILDTYPE} MATCHES static)
         add_library(${ARG_NAME} STATIC ${ARG_FILES} )
+        set_target_properties(${ARG_NAME} PROPERTIES FOLDER ${lib_folder})
     else()
         message(FATAL_ERROR "build_type=${ARG_BUILDTYPE} doesn't match executable, shared or static")
     endif()
