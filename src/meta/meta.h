@@ -1,6 +1,7 @@
 #ifndef META_H
 #define META_H
 
+
 namespace meta
 {
 const char *gitCommitHash();
