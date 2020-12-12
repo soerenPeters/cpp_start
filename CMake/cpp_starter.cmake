@@ -24,23 +24,9 @@ set(third_folder "3rd")
 # include helper functions
 include(${CMAKE_CURRENT_LIST_DIR}/build_utilities.cmake)
 
-######################################################################################################################
-## Load additional compiler flags                                                                                   ##
-## the file needs to be named after one of the following compiler with file ending *.cmake:                         ##
-## https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_ID.html#variable:CMAKE_<LANG>_COMPILER_ID       ##
-######################################################################################################################
-if(NOT DEFINED BUILD_COMPILER_FILE_PATH)
-    status("Use intern compiler flags: ${CMAKE_CURRENT_LIST_DIR}/compilerflags/")
-    status("For own compiler flags, the variable BUILD_COMPILER_FILE_PATH must be set.")
-    set(BUILD_COMPILER_FILE_PATH "${CMAKE_CURRENT_LIST_DIR}/compilerflags/")
-endif()
-if(EXISTS "${BUILD_COMPILER_FILE_PATH}/${CMAKE_CXX_COMPILER_ID}.cmake")
-    status("Load compiler file: ${BUILD_COMPILER_FILE_PATH}/${CMAKE_CXX_COMPILER_ID}.cmake")
-    include(${BUILD_COMPILER_FILE_PATH}/${CMAKE_CXX_COMPILER_ID}.cmake)
-else()
-    status("${CMAKE_CXX_COMPILER_ID}.cmake file not found.")
-endif()
 
+# load additional files
+load_compiler_flags()
 load_machine_file()
 
 

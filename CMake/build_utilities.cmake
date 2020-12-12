@@ -48,6 +48,26 @@ macro(load_machine_file)
 endmacro()
 
 
+######################################################################################################################
+## Load additional compiler flags                                                                                   ##
+## the file needs to be named after one of the following compiler with file ending *.cmake:                         ##
+## https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_ID.html#variable:CMAKE_<LANG>_COMPILER_ID       ##
+######################################################################################################################
+macro(load_compiler_flags)
+    if(NOT DEFINED BUILD_COMPILER_FILE_PATH)
+        status("Use intern compiler flags: ${CMAKE_CURRENT_LIST_DIR}/compilerflags/")
+        status("For own compiler flags, the variable BUILD_COMPILER_FILE_PATH must be set.")
+        set(BUILD_COMPILER_FILE_PATH "${CMAKE_CURRENT_LIST_DIR}/compilerflags/")
+    endif()
+    if(EXISTS "${BUILD_COMPILER_FILE_PATH}/${CMAKE_CXX_COMPILER_ID}.cmake")
+        status("Load compiler file: ${BUILD_COMPILER_FILE_PATH}/${CMAKE_CXX_COMPILER_ID}.cmake")
+        include(${BUILD_COMPILER_FILE_PATH}/${CMAKE_CXX_COMPILER_ID}.cmake)
+    else()
+        status("${CMAKE_CXX_COMPILER_ID}.cmake file not found.")
+    endif()
+endmacro()
+
+
 #################################################################################
 ## Add a target with the name TARGET_NAME and add SOURCE_FILES.
 ## Link the libraries PUBLIC_LINK and PRIVATE_LINK and add compiler flags to the target.
