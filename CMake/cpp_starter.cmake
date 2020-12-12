@@ -31,7 +31,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/build_utilities.cmake)
 ######################################################################################################################
 if(NOT DEFINED BUILD_COMPILER_FILE_PATH)
     status("Use intern compiler flags: ${CMAKE_CURRENT_LIST_DIR}/compilerflags/")
-    status("For own compiler flags, the variable BUILD_COMPILER_FILE_PATH must be set before the include.")
+    status("For own compiler flags, the variable BUILD_COMPILER_FILE_PATH must be set.")
     set(BUILD_COMPILER_FILE_PATH "${CMAKE_CURRENT_LIST_DIR}/compilerflags/")
 endif()
 if(EXISTS "${BUILD_COMPILER_FILE_PATH}/${CMAKE_CXX_COMPILER_ID}.cmake")
@@ -40,6 +40,8 @@ if(EXISTS "${BUILD_COMPILER_FILE_PATH}/${CMAKE_CXX_COMPILER_ID}.cmake")
 else()
     status("${CMAKE_CXX_COMPILER_ID}.cmake file not found.")
 endif()
+
+load_machine_file()
 
 
 

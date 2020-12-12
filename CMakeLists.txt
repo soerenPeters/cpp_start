@@ -14,6 +14,9 @@ set(LINK_OPTIONS)
 # Set this variable to the path with the self-written compiler flag files.
 # set(BUILD_COMPILER_FILE_PATH "${CMAKE_CURRENT_LIST_DIR}/path/to/my/flags/")
 
+# Set this variable to the path with the self-written machine files.
+# set(BUILD_MACHINE_FILE_PATH "${CMAKE_CURRENT_LIST_DIR}/path/to/my/machine/files/")
+
 include(CMake/cpp_starter.cmake)
 
 

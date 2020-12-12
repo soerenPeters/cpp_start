@@ -20,6 +20,34 @@ function(generateExportHeader target_name)
             )
 endfunction(generateExportHeader)
 
+
+#########################################################################################
+## Access the hostname and loads a optional machine file hostname.cmake
+## The machine file path BUILD_MACHINE_FILE_PATH must be set before.
+#########################################################################################
+macro(load_machine_file)
+
+    execute_process(COMMAND hostname OUTPUT_VARIABLE MACHINE_NAME)
+    string(REGEX REPLACE "[ ]*([A-Za-z0-9]+).*[\\\\n]*" "\\1" MACHINE_NAME "${MACHINE_NAME}" )
+
+    if(NOT DEFINED BUILD_MACHINE_FILE_PATH)
+        status("Use intern compiler flags: ${CMAKE_CURRENT_LIST_DIR}/machinefiles/")
+        status("For self-written machine files, the variable BUILD_MACHINE_FILE_PATH must be set.")
+        set(BUILD_MACHINE_FILE_PATH "${CMAKE_CURRENT_LIST_DIR}/machinefiles/")
+    endif()
+
+    set(MACHINE_FILE "${BUILD_MACHINE_FILE_PATH}/${MACHINE_NAME}.cmake")
+
+    IF(NOT EXISTS ${MACHINE_FILE})
+        status("No configuration file found: ${MACHINE_FILE}.")
+    ELSE()
+        status("Load configuration file: ${MACHINE_FILE}")
+        include(${MACHINE_FILE})
+    ENDIF()
+
+endmacro()
+
+
 #################################################################################
 ## Add a target with the name TARGET_NAME and add SOURCE_FILES.
 ## Link the libraries PUBLIC_LINK and PRIVATE_LINK and add compiler flags to the target.
