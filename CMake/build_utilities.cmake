@@ -20,6 +20,54 @@ function(generateExportHeader target_name)
             )
 endfunction(generateExportHeader)
 
+
+#########################################################################################
+## Access the hostname and loads a optional machine file hostname.cmake
+## The machine file path BUILD_MACHINE_FILE_PATH must be set before.
+#########################################################################################
+macro(load_machine_file)
+
+    execute_process(COMMAND hostname OUTPUT_VARIABLE MACHINE_NAME)
+    string(REGEX REPLACE "[ ]*([A-Za-z0-9]+).*[\\\\n]*" "\\1" MACHINE_NAME "${MACHINE_NAME}" )
+
+    if(NOT DEFINED BUILD_MACHINE_FILE_PATH)
+        status("Use intern compiler flags: ${CMAKE_CURRENT_LIST_DIR}/machinefiles/")
+        status("For self-written machine files, the variable BUILD_MACHINE_FILE_PATH must be set.")
+        set(BUILD_MACHINE_FILE_PATH "${CMAKE_CURRENT_LIST_DIR}/machinefiles/")
+    endif()
+
+    set(MACHINE_FILE "${BUILD_MACHINE_FILE_PATH}/${MACHINE_NAME}.cmake")
+
+    IF(NOT EXISTS ${MACHINE_FILE})
+        status("No configuration file found: ${MACHINE_FILE}.")
+    ELSE()
+        status("Load configuration file: ${MACHINE_FILE}")
+        include(${MACHINE_FILE})
+    ENDIF()
+
+endmacro()
+
+
+######################################################################################################################
+## Load additional compiler flags                                                                                   ##
+## the file needs to be named after one of the following compiler with file ending *.cmake:                         ##
+## https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_ID.html#variable:CMAKE_<LANG>_COMPILER_ID       ##
+######################################################################################################################
+macro(load_compiler_flags)
+    if(NOT DEFINED BUILD_COMPILER_FILE_PATH)
+        status("Use intern compiler flags: ${CMAKE_CURRENT_LIST_DIR}/compilerflags/")
+        status("For own compiler flags, the variable BUILD_COMPILER_FILE_PATH must be set.")
+        set(BUILD_COMPILER_FILE_PATH "${CMAKE_CURRENT_LIST_DIR}/compilerflags/")
+    endif()
+    if(EXISTS "${BUILD_COMPILER_FILE_PATH}/${CMAKE_CXX_COMPILER_ID}.cmake")
+        status("Load compiler file: ${BUILD_COMPILER_FILE_PATH}/${CMAKE_CXX_COMPILER_ID}.cmake")
+        include(${BUILD_COMPILER_FILE_PATH}/${CMAKE_CXX_COMPILER_ID}.cmake)
+    else()
+        status("${CMAKE_CXX_COMPILER_ID}.cmake file not found.")
+    endif()
+endmacro()
+
+
 #################################################################################
 ## Add a target with the name TARGET_NAME and add SOURCE_FILES.
 ## Link the libraries PUBLIC_LINK and PRIVATE_LINK and add compiler flags to the target.
@@ -195,18 +243,3 @@ function(_add_target)
     status("..done.")
 
 endfunction()
-
-
-
-######################################################################################################################
-## Load additional compiler flags                                                                                   ##
-## the file needs to be named after one of the following compiler with file ending *.cmake:                         ##
-## https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_ID.html#variable:CMAKE_<LANG>_COMPILER_ID       ##
-######################################################################################################################
-if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/compilerflags/${CMAKE_CXX_COMPILER_ID}.cmake")
-    status("Load compiler file: ${CMAKE_CXX_COMPILER_ID}.cmake")
-    include(${CMAKE_CURRENT_LIST_DIR}/compilerflags/${CMAKE_CXX_COMPILER_ID}.cmake)
-else()
-    status("${CMAKE_CXX_COMPILER_ID}.cmake file not found.")
-endif()
-

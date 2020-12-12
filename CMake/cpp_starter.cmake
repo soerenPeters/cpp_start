@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
+# global properties
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER ".cmake")
 
@@ -20,8 +21,15 @@ set(app_folder "apps")
 set(test_folder "tests")
 set(third_folder "3rd")
 
-
+# include helper functions
 include(${CMAKE_CURRENT_LIST_DIR}/build_utilities.cmake)
+
+
+# load additional files
+load_compiler_flags()
+load_machine_file()
+
+
 
 # set the msvc runtime library for all targets
 set(WIN_SHARED_LIBS_ENDING "")
