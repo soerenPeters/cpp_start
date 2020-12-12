@@ -195,18 +195,3 @@ function(_add_target)
     status("..done.")
 
 endfunction()
-
-
-
-######################################################################################################################
-## Load additional compiler flags                                                                                   ##
-## the file needs to be named after one of the following compiler with file ending *.cmake:                         ##
-## https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_ID.html#variable:CMAKE_<LANG>_COMPILER_ID       ##
-######################################################################################################################
-if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/compilerflags/${CMAKE_CXX_COMPILER_ID}.cmake")
-    status("Load compiler file: ${CMAKE_CXX_COMPILER_ID}.cmake")
-    include(${CMAKE_CURRENT_LIST_DIR}/compilerflags/${CMAKE_CXX_COMPILER_ID}.cmake)
-else()
-    status("${CMAKE_CXX_COMPILER_ID}.cmake file not found.")
-endif()
-
