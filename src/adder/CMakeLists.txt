@@ -3,11 +3,11 @@ project(Adder CXX)
 set(TARGET_NAME
         adder)
 
-set(SOURCE_FILES
-        Adder.cpp)
+set(FIND_FILES_AUTOMATICALLY ON)
 
-set(TEST_FILES
-        test_adder.cpp)
+set(SOURCE_FILES)
+
+set(TEST_FILES)
 
 set(PUBLIC_LINK)
 

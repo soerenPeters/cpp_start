@@ -1,4 +1,23 @@
 #################################################################################
+## set global project file endings
+#################################################################################
+list(APPEND GLOB_FILE_ENDINGS
+        *.cpp
+        *.c
+        *.h
+        *.cu
+        *.cuh
+        *.hpp )
+
+#################################################################################
+## set test files identifier
+#################################################################################
+list(APPEND TEST_FILES_IDENTIFIER
+        test_
+        mock_
+        )
+
+#################################################################################
 ## helper
 #################################################################################
 function(status msg)
@@ -68,6 +87,34 @@ macro(load_compiler_flags)
 endmacro()
 
 
+######################################################################################################################
+## Finds files recursively and sort these into test and source files.                                               ##
+## NOTE: cmake warns to set all files manually https://cmake.org/cmake/help/latest/command/file.html#glob-recurse   ##
+######################################################################################################################
+macro(find_files_recursively)
+    file(GLOB_RECURSE all_files ${GLOB_FILE_ENDINGS})
+
+    # iterate over all found files
+    foreach(file ${all_files})
+        get_filename_component(file_name ${file} NAME)
+
+        # check if is a test files
+        set(is_test_file false)
+        foreach(test_identifier ${TEST_FILES_IDENTIFIER})
+            if(${file_name} MATCHES ${test_identifier})
+                list(APPEND TEST_FILES ${file})
+                set(is_test_file true)
+            endif()
+        endforeach()
+
+        # else the file is passed to the source files
+        if(NOT is_test_file)
+            list(APPEND SOURCE_FILES ${file})
+        endif()
+    endforeach()
+endmacro()
+
+
 #################################################################################
 ## Add a target with the name TARGET_NAME and add SOURCE_FILES.
 ## Link the libraries PUBLIC_LINK and PRIVATE_LINK and add compiler flags to the target.
@@ -83,6 +130,11 @@ function(add_target)
             set(BUILDTYPE "static")
         endif()
     endif()
+
+    if(DEFINED FIND_FILES_AUTOMATICALLY)
+        find_files_recursively()
+    endif()
+
 
     _add_target(
             NAME ${TARGET_NAME}
