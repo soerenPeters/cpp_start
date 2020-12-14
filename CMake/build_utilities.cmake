@@ -131,6 +131,27 @@ function(add_target)
         endif()
     endif()
 
+    # check files. If the file has no file path the current CMakeLists.txt path is added.
+    foreach(file ${SOURCE_FILES})
+        get_filename_component(path ${file} PATH)
+        if(path STREQUAL "")
+            set(file ${CMAKE_CURRENT_LIST_DIR}/${file})
+        endif()
+        list(APPEND file_list ${file})
+    endforeach()
+    set(SOURCE_FILES ${file_list})
+
+    foreach(file ${TEST_FILES})
+        get_filename_component(path ${file} PATH)
+        if(path STREQUAL "")
+            set(file ${CMAKE_CURRENT_LIST_DIR}/${file})
+        endif()
+    list(APPEND file_list_ ${file})
+    endforeach()
+    set(TEST_FILES ${file_list_})
+
+
+
     if(DEFINED FIND_FILES_AUTOMATICALLY)
         find_files_recursively()
     endif()
@@ -213,6 +234,12 @@ function(_add_target)
 
     status("Configure target: ${ARG_NAME} (${ARG_BUILDTYPE})...")
 
+    # set source group for files within the CMakeLists.txt folder
+    foreach(file ${ARG_FILES})
+        if(${file} MATCHES "^${CMAKE_CURRENT_LIST_DIR}")
+            source_group(TREE ${CMAKE_CURRENT_LIST_DIR} FILES ${file})
+        endif()
+    endforeach()
 
     # Create the target
     if(${ARG_BUILDTYPE} MATCHES executable)
