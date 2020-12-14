@@ -115,6 +115,33 @@ macro(find_files_recursively)
 endmacro()
 
 
+######################################################################################################################
+##  If the file has no file path the current CMakeLists.txt path is added.                                          ##
+##  Afterwards all SOURCE_FILES and TEST_FILES are with filepath.                                                   ##
+######################################################################################################################
+macro(set_file_path)
+
+    foreach(file ${SOURCE_FILES})
+        get_filename_component(path ${file} PATH)
+        if(path STREQUAL "")
+            set(file ${CMAKE_CURRENT_LIST_DIR}/${file})
+        endif()
+        list(APPEND file_list ${file})
+    endforeach()
+    set(SOURCE_FILES ${file_list})
+
+    foreach(file ${TEST_FILES})
+        get_filename_component(path ${file} PATH)
+        if(path STREQUAL "")
+            set(file ${CMAKE_CURRENT_LIST_DIR}/${file})
+        endif()
+        list(APPEND file_list_ ${file})
+    endforeach()
+    set(TEST_FILES ${file_list_})
+
+endmacro()
+
+
 #################################################################################
 ## Add a target with the name TARGET_NAME and add SOURCE_FILES.
 ## Link the libraries PUBLIC_LINK and PRIVATE_LINK and add compiler flags to the target.
@@ -131,31 +158,11 @@ function(add_target)
         endif()
     endif()
 
-    # check files. If the file has no file path the current CMakeLists.txt path is added.
-    foreach(file ${SOURCE_FILES})
-        get_filename_component(path ${file} PATH)
-        if(path STREQUAL "")
-            set(file ${CMAKE_CURRENT_LIST_DIR}/${file})
-        endif()
-        list(APPEND file_list ${file})
-    endforeach()
-    set(SOURCE_FILES ${file_list})
-
-    foreach(file ${TEST_FILES})
-        get_filename_component(path ${file} PATH)
-        if(path STREQUAL "")
-            set(file ${CMAKE_CURRENT_LIST_DIR}/${file})
-        endif()
-    list(APPEND file_list_ ${file})
-    endforeach()
-    set(TEST_FILES ${file_list_})
-
-
+    set_file_path()
 
     if(DEFINED FIND_FILES_AUTOMATICALLY)
         find_files_recursively()
     endif()
-
 
     _add_target(
             NAME ${TARGET_NAME}
