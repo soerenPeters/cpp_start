@@ -22,12 +22,12 @@ std::vector<double> OpenMP_example::add(const std::vector<double>& a, const std:
 #else
     unsigned long long i {0};
 #endif
-
-    std::vector<double> result (a.size());
+    const auto size = a.size();
+    std::vector<double> result (size);
 #if defined(_OPENMP)
 #pragma omp parallel for
 #endif
-    for (i = 0; i < a.size(); ++i) {
+    for (i = 0; i < size; ++i) {
         spdlog::info("OpenMP thread: {0}", getThreadNumber());
         result[i] = a[i] + b[i];
     }
@@ -38,24 +38,24 @@ std::vector<double> OpenMP_example::add(const std::vector<double>& a, const std:
 
 int OpenMP_example::getThreadNumber() const
 {
-    int thread_number {0};
+    int threadNumber {0};
 
 #if defined(_OPENMP)
-    thread_number = omp_get_thread_num();
+    threadNumber = omp_get_thread_num();
 #endif
 
-    return thread_number;
+    return threadNumber;
 }
 
 int OpenMP_example::getMaxThreads() const
 {
-    int max_threads {1};
+    int maxThreads {1};
 
 #if defined(_OPENMP)
-    max_threads = omp_get_max_threads();
+    maxThreads = omp_get_max_threads();
 #endif
 
-    return max_threads;
+    return maxThreads;
 }
 
 
