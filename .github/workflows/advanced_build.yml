@@ -14,7 +14,7 @@ jobs:
         mkdir build && cd build
         cmake .. \
         -DBUILD_WARNINGS_AS_ERRORS=ON \
-        -DBUILD_USE_OPENMP=ON
+        -DBUILD_USE_OPENMP=ON \
 
       - name: build
         run: cmake --build build --config Debug
@@ -35,7 +35,7 @@ jobs:
         cmake .. \
         -DBUILD_WARNINGS_AS_ERRORS=ON \
         -DBUILD_SHARED_LIBS=OFF \
-        -DBUILD_USE_OPENMP=ON
+        -DBUILD_USE_OPENMP=ON \
 
       - name: build
         run: cmake --build build --config Debug
@@ -56,7 +56,7 @@ jobs:
         mkdir build && cd build
         cmake .. \
         -DBUILD_WARNINGS_AS_ERRORS=ON \
-        -DBUILD_USE_OPENMP=ON
+        -DBUILD_USE_OPENMP=ON \
 
       - name: build
         run: cmake --build build --config Debug
@@ -76,7 +76,7 @@ jobs:
         cmake .. \
         -DBUILD_WARNINGS_AS_ERRORS=ON \
         -DBUILD_SHARED_LIBS=OFF \
-        -DBUILD_USE_OPENMP=ON
+        -DBUILD_USE_OPENMP=ON \
 
       - name: build
         run: cmake --build build --config Debug
