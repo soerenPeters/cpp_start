@@ -18,5 +18,5 @@ if(BUILD_WARNINGS_AS_ERRORS)
 endif()
 
 if(BUILD_SHARED_LIBS)
-    list(APPEND COMPILER_FLAGS_CXX -fPIC)
+    add_compile_options(-fPIC)
 endif()
