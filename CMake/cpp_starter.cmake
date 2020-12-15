@@ -14,6 +14,8 @@ option(BUILD_WARNINGS_AS_ERRORS "Make all warnings into errors." OFF)
 
 option(BUILD_SHARED_LIBS "Build all targets as shared libs in this project." ON)
 
+option(BUILD_USE_OPENMP "use OpenMP" OFF)
+
 
 # vars
 set(lib_folder "libs")
@@ -29,6 +31,13 @@ include(${CMAKE_CURRENT_LIST_DIR}/build_utilities.cmake)
 load_compiler_flags()
 load_machine_file()
 
+# parallel - openmp
+if(BUILD_USE_OPENMP)
+    find_package(OpenMP)
+    if(NOT OpenMP_CXX_FOUND)
+        message(FATAL_ERROR "OpenMP was requested but not found on the system. Consider running cmake with -DBUILD_USE_OPENMP=OFF")
+    endif()
+endif()
 
 
 # set the msvc runtime library for all targets
