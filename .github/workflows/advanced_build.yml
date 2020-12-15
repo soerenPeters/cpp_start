@@ -10,11 +10,10 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: configure
-        run: |
-        mkdir build && cd build
-        cmake .. \
-        -DBUILD_WARNINGS_AS_ERRORS=ON \
-        -DBUILD_USE_OPENMP=ON \
+        run: mkdir build && cd build && \
+          cmake .. \
+          -DBUILD_WARNINGS_AS_ERRORS=ON \
+          -DBUILD_USE_OPENMP=ON
 
       - name: build
         run: cmake --build build --config Debug
@@ -30,12 +29,11 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: configure
-        run: |
-        mkdir build && cd build
-        cmake .. \
-        -DBUILD_WARNINGS_AS_ERRORS=ON \
-        -DBUILD_SHARED_LIBS=OFF \
-        -DBUILD_USE_OPENMP=ON \
+        run: mkdir build && cd build && \
+          cmake .. \
+          -DBUILD_WARNINGS_AS_ERRORS=ON \
+          -DBUILD_SHARED_LIBS=OFF \
+          -DBUILD_USE_OPENMP=ON
 
       - name: build
         run: cmake --build build --config Debug
@@ -52,11 +50,10 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: configure
-        run: |
-        mkdir build && cd build
-        cmake .. \
-        -DBUILD_WARNINGS_AS_ERRORS=ON \
-        -DBUILD_USE_OPENMP=ON \
+        run: mkdir build && cd build && \
+          cmake .. \
+          -DBUILD_WARNINGS_AS_ERRORS=ON \
+          -DBUILD_USE_OPENMP=ON
 
       - name: build
         run: cmake --build build --config Debug
@@ -71,12 +68,11 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: configure
-        run: |
-        mkdir build && cd build
-        cmake .. \
-        -DBUILD_WARNINGS_AS_ERRORS=ON \
-        -DBUILD_SHARED_LIBS=OFF \
-        -DBUILD_USE_OPENMP=ON \
+        run: mkdir build && cd build && \
+          cmake .. \
+          -DBUILD_WARNINGS_AS_ERRORS=ON \
+          -DBUILD_SHARED_LIBS=OFF \
+          -DBUILD_USE_OPENMP=ON
 
       - name: build
         run: cmake --build build --config Debug
