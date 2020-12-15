@@ -16,6 +16,8 @@ option(BUILD_SHARED_LIBS "Build all targets as shared libs in this project." ON)
 
 option(BUILD_USE_OPENMP "use OpenMP" OFF)
 
+option(BUILD_USE_MPI "use MPI" OFF)
+
 
 # vars
 set(lib_folder "libs")
@@ -39,6 +41,13 @@ if(BUILD_USE_OPENMP)
     endif()
 endif()
 
+# parallel - mpi
+if(BUILD_USE_MPI)
+    find_package(MPI)
+    if(NOT MPI_FOUND)
+        message(FATAL_ERROR "MPI was requested but not found on the system. Consider running cmake with -DBUILD_USE_MPI=OFF")
+    endif()
+endif()
 
 # set the msvc runtime library for all targets
 set(WIN_SHARED_LIBS_ENDING "")
