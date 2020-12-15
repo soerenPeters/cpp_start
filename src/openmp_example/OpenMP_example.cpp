@@ -17,8 +17,11 @@ std::vector<double> OpenMP_example::add(const std::vector<double>& a, const std:
 {
     spdlog::info("Max OpenMP threads: {0}", getMaxThreads());
 
-
+#ifdef _MSC_VER
     int i {0}; // As msvc only supports openMP 2.0 so far, this variable needs to be an integer.
+#else
+    unsigned long long i {0};
+#endif
 
     std::vector<double> result (a.size());
 #if defined(_OPENMP)
