@@ -22,4 +22,5 @@ include(CMake/cpp_starter.cmake)
 
 add_subdirectory(src/adder)
 add_subdirectory(src/meta)
+add_subdirectory(src/openmp_example)
 

@@ -16,3 +16,7 @@ list(APPEND COMPILER_FLAGS_CXX -Wextra)
 if(BUILD_WARNINGS_AS_ERRORS)
     list(APPEND COMPILER_FLAGS_CXX -Werror)
 endif()
+
+if(BUILD_SHARED_LIBS)
+    add_compile_options(-fPIC)
+endif()

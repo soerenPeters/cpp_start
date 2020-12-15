@@ -1,0 +1,80 @@
+name: advanced_build
+
+on: [push, pull_request]
+
+jobs:
+  build_linux_omp:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: configure
+        run: >
+          mkdir build && cd build && cmake ..
+          -DBUILD_WARNINGS_AS_ERRORS=ON
+          -DBUILD_USE_OPENMP=ON
+
+      - name: build
+        run: cmake --build build --config Debug
+
+      - name: unit-tests
+        run: cd build && ctest
+
+
+  build_linux_static_omp:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: configure
+        run: >
+          mkdir build && cd build && cmake ..
+          -DBUILD_WARNINGS_AS_ERRORS=ON
+          -DBUILD_SHARED_LIBS=OFF
+          -DBUILD_USE_OPENMP=ON
+
+      - name: build
+        run: cmake --build build --config Debug
+
+      - name: unit-tests
+        run: cd build && ctest
+
+
+
+  build_windows_openmp:
+    runs-on: windows-2019
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: configure
+        run: >
+          mkdir build && cd build && cmake ..
+          -DBUILD_WARNINGS_AS_ERRORS=ON
+          -DBUILD_USE_OPENMP=ON
+
+      - name: build
+        run: cmake --build build --config Debug
+      - name: test
+        run: cd build && ctest -C Debug
+
+
+  build_windows_openmp_static:
+    runs-on: windows-2019
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: configure
+        run: >
+          mkdir build && cd build && cmake ..
+          -DBUILD_WARNINGS_AS_ERRORS=ON
+          -DBUILD_SHARED_LIBS=OFF
+          -DBUILD_USE_OPENMP=ON
+
+      - name: build
+        run: cmake --build build --config Debug
+      - name: test
+        run: cd build && ctest -C Debug
