@@ -141,6 +141,32 @@ macro(set_file_path)
 
 endmacro()
 
+######################################################################################################################
+## Find boost and add the components to the private link libraries.                                                 ##
+##                                                                                                                  ##
+## parameter:                                                                                                       ##
+## VERSION     - minimum required boost version                                                                     ##
+## COMPONENTS  - needed boost components                                                                            ##
+######################################################################################################################
+macro(link_boost)
+
+    set( options )
+    set( oneValueArgs VERSION)
+    set( multiValueArgs COMPONENTS)
+    cmake_parse_arguments( ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
+
+    set(Boost_USE_STATIC_LIBS OFF)
+    set(Boost_USE_MULTITHREADED ON)
+    set(Boost_USE_STATIC_RUNTIME OFF)
+    find_package(Boost ${ARG_VERSION} REQUIRED COMPONENTS ${ARG_COMPONENTS})
+    message(STATUS "Found Boost version: ${Boost_VERSION}")
+
+    foreach(component ${ARG_COMPONENTS})
+        list(APPEND PRIVATE_LINK Boost::${component})
+    endforeach()
+
+endmacro()
+
 
 #################################################################################
 ## Add a target with the name TARGET_NAME and add SOURCE_FILES.
@@ -324,6 +350,8 @@ function(_add_target)
     if (${ARG_BUILDTYPE} MATCHES shared OR ${ARG_BUILDTYPE} MATCHES static)
         generateExportHeader (${ARG_NAME})
     endif()
+
+
 
     # cppcheck
     if(BUILD_CPPCHECK)

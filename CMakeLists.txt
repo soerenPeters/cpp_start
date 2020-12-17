@@ -2,7 +2,14 @@ cmake_minimum_required(VERSION 3.14)
 
 project(CppStart CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+option(BUILD_BOOST_EXAMPLE "Build the boost example." ON)
+
+if(BUILD_BOOST_EXAMPLE) # As boost is using deprecated C++ features (like auto_ptr) we must stay on C++14.
+    set(CMAKE_CXX_STANDARD 14)
+else()
+    set(CMAKE_CXX_STANDARD 17)
+endif()
+
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(COMPILER_FLAGS_CXX)
@@ -22,5 +29,10 @@ include(CMake/cpp_starter.cmake)
 
 add_subdirectory(src/adder)
 add_subdirectory(src/meta)
+
+if(BUILD_BOOST_EXAMPLE)
+    add_subdirectory(src/boost_example)
+endif()
+
 add_subdirectory(src/openmp_example)
 add_subdirectory(src/mpi_example)
