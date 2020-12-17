@@ -136,9 +136,11 @@ jobs:
           cmake . -DCMAKE_PREFIX_PATH=/usr/lib/llvm-10
           make
           export PATH=$PATH:$(pwd)/bin
+          echo $PATH
 
       - name: build
         run: |
+          echo $PATH
           mkdir build
           cd build
           cmake .. -DBUILD_INCLUDE_WHAT_YOU_USE=ON -DBUILD_USE_OPENMP=ON -DBUILD_BOOST_EXAMPLE=ON
