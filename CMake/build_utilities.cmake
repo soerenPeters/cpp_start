@@ -376,6 +376,21 @@ function(_add_target)
         status("cppcheck enabled")
     endif()
 
+    # include-what-you-use
+    if(BUILD_INCLUDE_WHAT_YOU_USE)
+        find_program(IWYU_PROGRAM NAMES include-what-you-use iwyu)
+
+        if(NOT IWYU_PROGRAM)
+            message(FATAL_ERROR "Could not find the program include-what-you-use")
+        endif()
+
+        set_target_properties(${library_name}
+                PROPERTIES
+                CXX_INCLUDE_WHAT_YOU_USE ${IWYU_PROGRAM})
+
+        status("include-what-you-use enabled")
+    endif()
+
 
     status("..done.")
 

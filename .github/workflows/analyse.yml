@@ -116,6 +116,40 @@ jobs:
             lizard.txt
 
 ###########################################################################
+  include-what-you-use:
+    runs-on: ubuntu-20.04
+
+    container:
+      image: bssoeren/cpp_build_starter:latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: install boost
+        run: |
+          apt-get update -y
+          apt-get install -y libboost-filesystem1.71-dev
+
+      - name: install iwyu
+        run: |
+          export CC=clang
+          export CXX=clang++
+          $CXX --version
+          cd /tmp
+          git clone https://github.com/include-what-you-use/include-what-you-use.git
+          cd include-what-you-use
+          git checkout clang_10
+          cmake . -DCMAKE_PREFIX_PATH=/usr/lib/llvm-10
+          make
+
+      - name: build
+        run: |
+          export PATH=$PATH:/tmp/include-what-you-use/bin
+          mkdir build
+          cd build
+          cmake .. -DBUILD_INCLUDE_WHAT_YOU_USE=ON -DBUILD_USE_OPENMP=ON -DBUILD_BOOST_EXAMPLE=ON
+          make
+
+###########################################################################
   sonarcloud:
     runs-on: ubuntu-20.04
     needs: [gcov]
