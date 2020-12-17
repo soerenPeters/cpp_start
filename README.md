@@ -16,11 +16,18 @@ $ ctest
 ```
 
 ### CMake Options
-- BUILD_UNIT_TESTS : Create unit test targets. (ON)
-- BUILD_COVERAGE : Add the --coverage compiler flag. (OFF)  
-- BUILD_CLANG_TIDY : Enable clang-tidy checks. (OFF)  
+- BUILD_SHARED_LIBS : Build all targets as shared libraries in this project. (ON)
 - BUILD_WARNINGS_AS_ERRORS : Make all warnings into errors. (OFF)
+- BUILD_UNIT_TESTS : Create unit test targets. (ON)
+  
 
+- BUILD_COVERAGE : Add the --coverage compiler flag. (OFF)  
+- BUILD_CLANG_TIDY : Enable clang-tidy checks. (OFF)
+- BUILD_CPPCHECK : Enable cppcheck.  (OFF)
+  
+
+- BUILD_USE_OPENMP : use OpenMP. (OFF)
+- BUILD_USE_MPI : use MPI. (OFF)
 
 ### Compiler flags
 Compiler flags can be set individually for each compiler in "CMake/compilerflags/[COMPILER_FLAGS_CXX](https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_ID.html) .cmake". 
@@ -39,7 +46,9 @@ The following cmake lists will be set as private properties for each target:
    - Windows - msvc
  - analyse
      - code coverage [gcovr](https://gcovr.com/en/stable/)
-     - [clang-tidy](https://clang.llvm.org/extra/clang-tidy/) analysis
+     - [clang-tidy](https://clang.llvm.org/extra/clang-tidy/)
+     - [cppcheck](http://cppcheck.sourceforge.net)
+     - [lizard](https://github.com/terryyin/lizard)  
      - deployment to [sonarcloud.io](https://sonarcloud.io/dashboard?id=soerenPeters_cpp_start)
  
  
@@ -55,6 +64,16 @@ Set up Sonarcloud:
 There are dependencies on the following projects. These are fetched into the build order during cmake.
 -  unit test framework [googletest](https://github.com/google/googletest)
 -  logging framework [spdlog](https://github.com/gabime/spdlog)
+
+Further dependencies are not included. If they are enable in a [cmake option](#cmake-options) they must be provided within the environment.
+- Boost
+- OpenMP
+- MPI
+
+
+- cppcheck
+- clang-tidy
+- lizard
 
 ## Usage
 ### Add new targets
@@ -74,7 +93,9 @@ set(TEST_FILES
 
 set(PUBLIC_LINK)
 
-add_target(BUILDTYPE static)
+set(PRIVATE_LINK)
+
+add_target()
 ```
 - add an add_subdirectory() in the root CMakeLists.txt
 

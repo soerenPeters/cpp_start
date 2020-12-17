@@ -4,10 +4,7 @@ project(CppStart CXX)
 
 option(BUILD_BOOST_EXAMPLE "Build the boost example." OFF)
 
-
 set(CMAKE_CXX_STANDARD 17)
-
-
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(COMPILER_FLAGS_CXX)
