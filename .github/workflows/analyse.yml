@@ -86,6 +86,36 @@ jobs:
               cppcheck.xml
 
 ###########################################################################
+  lizard:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: install lizard
+        run: |
+          cd /tmp
+          git clone https://github.com/terryyin/lizard.git && cd lizard
+          python setup.py install
+          lizard --version
+
+
+      - name: run lizard
+        run: |
+          lizard -l cpp src/ > lizard.txt
+
+      - name: upload lizard
+        uses: actions/upload-artifact@v2
+        with:
+          name: lizard
+          path: |
+            lizard.txt
+
+###########################################################################
   sonarcloud:
     runs-on: ubuntu-20.04
     needs: [gcov]
