@@ -89,16 +89,18 @@ jobs:
   lizard:
     runs-on: ubuntu-20.04
 
-    container:
-      image: bssoeren/cpp_build_starter:latest
     steps:
       - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
 
       - name: install lizard
         run: |
           cd /tmp
           git clone https://github.com/terryyin/lizard.git && cd lizard
-          python3 setup.py install
+          python setup.py install
           lizard --version
 
 
