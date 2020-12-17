@@ -135,7 +135,7 @@ jobs:
           git checkout clang_10
           cmake . -DCMAKE_PREFIX_PATH=/usr/lib/llvm-10
           make
-          export PATH+=:$(pwd)/bin
+          export PATH=$PATH:$(pwd)/bin
 
       - name: build
         run: |
