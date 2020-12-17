@@ -13,7 +13,7 @@ set(PUBLIC_LINK)
 
 set(PRIVATE_LINK)
 
-link_boost(VERSION 1.60 COMPONENTS filesystem)
+link_boost(VERSION 1.70 COMPONENTS filesystem)
 
 add_target()
 

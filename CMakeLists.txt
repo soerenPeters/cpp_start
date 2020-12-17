@@ -4,11 +4,9 @@ project(CppStart CXX)
 
 option(BUILD_BOOST_EXAMPLE "Build the boost example." OFF)
 
-if(BUILD_BOOST_EXAMPLE) # As boost is using deprecated C++ features (like auto_ptr) we must stay on C++14.
-    set(CMAKE_CXX_STANDARD 14)
-else()
-    set(CMAKE_CXX_STANDARD 17)
-endif()
+
+set(CMAKE_CXX_STANDARD 17)
+
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
