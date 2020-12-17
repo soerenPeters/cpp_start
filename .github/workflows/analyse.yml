@@ -126,8 +126,8 @@ jobs:
 
       - name: install boost
         run: |
-          sudo apt-get update -y
-          sudo apt-get install -y libboost-filesystem1.71-dev
+          apt-get update -y
+          apt-get install -y libboost-filesystem1.71-dev
 
       - name: install iwyu
         run: |
