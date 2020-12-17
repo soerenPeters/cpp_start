@@ -155,9 +155,17 @@ macro(link_boost)
     set( multiValueArgs COMPONENTS)
     cmake_parse_arguments( ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
 
-    set(Boost_USE_STATIC_LIBS OFF)
     set(Boost_USE_MULTITHREADED ON)
+
+    set(Boost_USE_STATIC_LIBS OFF)
     set(Boost_USE_STATIC_RUNTIME OFF)
+
+    # disable auto linking in boost
+    if (WIN32)
+        add_definitions( -DBOOST_ALL_NO_LIB )
+    endif()
+
+
     find_package(Boost ${ARG_VERSION} REQUIRED COMPONENTS ${ARG_COMPONENTS})
     message(STATUS "Found Boost version: ${Boost_VERSION}")
 

@@ -7,10 +7,12 @@
 
 #include <string>
 
+#include "Boost_example_export.h"
+
 namespace cpp_start
 {
 
-class Boost_example
+class BOOST_EXAMPLE_EXPORT Boost_example
 {
 public:
     std::string getCurrentPath() const;
