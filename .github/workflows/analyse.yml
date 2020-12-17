@@ -11,15 +11,16 @@ jobs:
 
       - name: Install gcov
         run: |
-          sudo apt-get update -y
-          sudo apt-get install -y gcovr
+          apt-get update -y
+          apt-get install -y gcovr
           gcovr --version
+          apt-get install -y libboost-filesystem1.71-dev
 
       - name: build
         run: |
           mkdir build
           cd build
-          cmake .. -DBUILD_COVERAGE=ON -DBUILD_USE_OPENMP=ON
+          cmake .. -DBUILD_COVERAGE=ON -DBUILD_USE_OPENMP=ON BUILD_BOOST_EXAMPLE=ON
           make
           ctest
 
