@@ -86,7 +86,7 @@ jobs:
 
 ###########################################################################
   sonarcloud:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs: [gcov]
     steps:
       - uses: actions/checkout@v2

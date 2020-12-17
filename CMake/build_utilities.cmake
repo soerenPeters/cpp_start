@@ -325,6 +325,21 @@ function(_add_target)
         generateExportHeader (${ARG_NAME})
     endif()
 
+    # cppcheck
+    if(BUILD_CPPCHECK)
+        find_program(CPPCHECK_PROGRAM NAMES cppcheck)
+
+        if(NOT CPPCHECK_PROGRAM)
+            message(FATAL_ERROR "cppcheck was requested but not found on the system. Consider running cmake with -DBUILD_USE_CPPCHECK=OFF")
+        endif()
+
+        set_target_properties(${ARG_NAME}
+                PROPERTIES
+                CXX_CPPCHECK "${CPPCHECK_PROGRAM};--enable=all")
+
+        status("cppcheck enabled")
+    endif()
+
 
     status("..done.")
 
