@@ -19,13 +19,9 @@ $ ctest
 - BUILD_SHARED_LIBS : Build all targets as shared libraries in this project. (ON)
 - BUILD_WARNINGS_AS_ERRORS : Make all warnings into errors. (OFF)
 - BUILD_UNIT_TESTS : Create unit test targets. (ON)
-  
-
 - BUILD_COVERAGE : Add the --coverage compiler flag. (OFF)  
 - BUILD_CLANG_TIDY : Enable clang-tidy checks. (OFF)
 - BUILD_CPPCHECK : Enable cppcheck.  (OFF)
-  
-
 - BUILD_USE_OPENMP : use OpenMP. (OFF)
 - BUILD_USE_MPI : use MPI. (OFF)
 
@@ -69,8 +65,6 @@ Further dependencies are not included. If they are enable in a [cmake option](#c
 - Boost
 - OpenMP
 - MPI
-
-
 - cppcheck
 - clang-tidy
 - lizard
