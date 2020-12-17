@@ -20,7 +20,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake .. -DBUILD_COVERAGE=ON -DBUILD_USE_OPENMP=ON BUILD_BOOST_EXAMPLE=ON
+          cmake .. -DBUILD_COVERAGE=ON -DBUILD_USE_OPENMP=ON -DBUILD_BOOST_EXAMPLE=ON
           make
           ctest
 
