@@ -9,6 +9,8 @@ option(CMAKE_VERBOSE_OUTPUT "Enable additional CMake output per target." ON)
 
 option(BUILD_COVERAGE "Add the --coverage compiler flag." OFF)
 option(BUILD_CLANG_TIDY "Enable clang-tidy checks." OFF)
+option(BUILD_CPPCHECK "Enable cppcheck." OFF)
+
 option(BUILD_UNIT_TESTS "Add the unit test targets." ON)
 option(BUILD_WARNINGS_AS_ERRORS "Make all warnings into errors." OFF)
 

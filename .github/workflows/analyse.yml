@@ -59,8 +59,34 @@ jobs:
             build/compile_commands.json
 
 ###########################################################################
+  cppcheck:
+      runs-on: ubuntu-20.04
+
+      container:
+        image: bssoeren/cpp_build_starter:latest
+      steps:
+        - uses: actions/checkout@v2
+
+        - name: install cppcheck
+          run: |
+            apt-get update
+            apt-get install -y cppcheck
+
+        - name: run cppcheck
+          run: |
+            cppcheck --version
+            cppcheck src --enable=all --xml 2> cppcheck.xml
+
+        - name: upload cppcheck
+          uses: actions/upload-artifact@v2
+          with:
+            name: cppcheck
+            path: |
+              cppcheck.xml
+
+###########################################################################
   sonarcloud:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs: [gcov]
     steps:
       - uses: actions/checkout@v2
