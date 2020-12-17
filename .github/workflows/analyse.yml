@@ -11,10 +11,10 @@ jobs:
 
       - name: Install gcov
         run: |
-          apt-get update -y
-          apt-get install -y gcovr
+          sudo apt-get update -y
+          sudo apt-get install -y gcovr
           gcovr --version
-          apt-get install -y libboost-filesystem1.71-dev
+          sudo apt-get install -y libboost-filesystem1.71-dev
 
       - name: build
         run: |
