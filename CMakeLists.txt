@@ -2,7 +2,12 @@ cmake_minimum_required(VERSION 3.14)
 
 project(CppStart CXX)
 
+option(BUILD_BOOST_EXAMPLE "Build the boost example." OFF)
+
+
 set(CMAKE_CXX_STANDARD 17)
+
+
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(COMPILER_FLAGS_CXX)
@@ -22,5 +27,10 @@ include(CMake/cpp_starter.cmake)
 
 add_subdirectory(src/adder)
 add_subdirectory(src/meta)
+
+if(BUILD_BOOST_EXAMPLE)
+    add_subdirectory(src/boost_example)
+endif()
+
 add_subdirectory(src/openmp_example)
 add_subdirectory(src/mpi_example)

@@ -14,12 +14,13 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y gcovr
           gcovr --version
+          sudo apt-get install -y libboost-filesystem1.71-dev
 
       - name: build
         run: |
           mkdir build
           cd build
-          cmake .. -DBUILD_COVERAGE=ON -DBUILD_USE_OPENMP=ON
+          cmake .. -DBUILD_COVERAGE=ON -DBUILD_USE_OPENMP=ON -DBUILD_BOOST_EXAMPLE=ON
           make
           ctest
 
