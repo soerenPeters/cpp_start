@@ -124,6 +124,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: install boost
+        run: sudo apt-get update -y && sudo apt-get install -y libboost-filesystem1.71-dev
+
       - name: install iwyu
         run: |
           export CC=clang
