@@ -35,7 +35,7 @@ add_subdirectory(src/mpi_example)
 include(CheckLanguage)
 check_language(CUDA)
 
-if(DEFINED CMAKE_CUDA_COMPILER)
+if(CMAKE_CUDA_COMPILER)
     set(CMAKE_CUDA_STANDARD 11)
     set(CMAKE_CUDA_STANDARD_REQUIRED ON)
 
