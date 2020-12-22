@@ -20,7 +20,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake .. -DBUILD_COVERAGE=ON -DBUILD_USE_OPENMP=ON -DBUILD_BOOST_EXAMPLE=ON
+          cmake .. -DCPPSTART_ENABLE_COVERAGE=ON -DCPPSTART_USE_OPENMP=ON -DBUILD_BOOST_EXAMPLE=ON
           make
           ctest
 
@@ -146,7 +146,7 @@ jobs:
           export PATH=$PATH:/tmp/include-what-you-use/bin
           mkdir build
           cd build
-          cmake .. -DBUILD_INCLUDE_WHAT_YOU_USE=ON -DBUILD_USE_OPENMP=ON -DBUILD_BOOST_EXAMPLE=ON
+          cmake .. -DBUILD_INCLUDE_WHAT_YOU_USE=ON -DCPPSTART_USE_OPENMP=ON -DBUILD_BOOST_EXAMPLE=ON
           make
 
 ###########################################################################

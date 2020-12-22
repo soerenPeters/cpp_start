@@ -1,32 +1,37 @@
 cmake_minimum_required(VERSION 3.15)
 
+
 # global properties
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER ".cmake")
 
+
 # options
 option(CMAKE_VERBOSE_OUTPUT "Enable additional CMake output per target." ON)
 
-option(BUILD_COVERAGE "Add the --coverage compiler flag." OFF)
-option(BUILD_CLANG_TIDY "Enable clang-tidy checks." OFF)
-option(BUILD_CPPCHECK "Enable cppcheck." OFF)
-option(BUILD_INCLUDE_WHAT_YOU_USE "Enable Include what you use." OFF)
-
-option(BUILD_UNIT_TESTS "Add the unit test targets." ON)
+option(BUILD_SHARED_LIBS "Build all targets as shared libs in this project." ON)
 option(BUILD_WARNINGS_AS_ERRORS "Make all warnings into errors." OFF)
 
-option(BUILD_SHARED_LIBS "Build all targets as shared libs in this project." ON)
 
-option(BUILD_USE_OPENMP "use OpenMP" OFF)
+option(CPPSTART_USE_OPENMP "use OpenMP" OFF)
+option(CPPSTART_USE_MPI "use MPI" OFF)
 
-option(BUILD_USE_MPI "use MPI" OFF)
+option(CPPSTART_BUILD_UNIT_TESTS "Add the unit test targets." ON)
+option(CPPSTART_ENABLE_CATCH2 "Links the Unit-Test against catch2." ON)
+option(CPPSTART_ENABLE_GTEST "Links the unit-tests against googletest." ON)
+option(CPPSTART_ENABLE_COVERAGE "Add the --coverage compiler flag." OFF)
+option(CPPSTART_ENABLE_CLANG_TIDY "Enable clang-tidy checks." OFF)
+option(CPPSTART_ENABLE_CPPCHECK "Enable cppcheck." OFF)
+option(CPPSTART_ENABLE_INCLUDE_WHAT_YOU_USE "Enable Include what you use." OFF)
 
 
-# vars
+
+# set IDE folder group names
 set(lib_folder "libs")
 set(app_folder "apps")
 set(test_folder "tests")
 set(third_folder "3rd")
+
 
 # include helper functions
 include(${CMAKE_CURRENT_LIST_DIR}/build_utilities.cmake)
@@ -36,21 +41,6 @@ include(${CMAKE_CURRENT_LIST_DIR}/build_utilities.cmake)
 load_compiler_flags()
 load_machine_file()
 
-# parallel - openmp
-if(BUILD_USE_OPENMP)
-    find_package(OpenMP)
-    if(NOT OpenMP_CXX_FOUND)
-        message(FATAL_ERROR "OpenMP was requested but not found on the system. Consider running cmake with -DBUILD_USE_OPENMP=OFF")
-    endif()
-endif()
-
-# parallel - mpi
-if(BUILD_USE_MPI)
-    find_package(MPI)
-    if(NOT MPI_FOUND)
-        message(FATAL_ERROR "MPI was requested but not found on the system. Consider running cmake with -DBUILD_USE_MPI=OFF")
-    endif()
-endif()
 
 # set the msvc runtime library for all targets
 set(WIN_SHARED_LIBS_ENDING "")
@@ -59,22 +49,47 @@ if(BUILD_SHARED_LIBS)
 endif()
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>${WIN_SHARED_LIBS_ENDING}")
 
-# code coverage gcov
-if (BUILD_COVERAGE AND ${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
-    list(APPEND COMPILER_FLAGS_CXX "--coverage")
-    list(APPEND LINK_OPTIONS "--coverage")
+
+# parallel - openmp
+if(CPPSTART_USE_OPENMP)
+    find_package(OpenMP)
+    if(NOT OpenMP_CXX_FOUND)
+        message(FATAL_ERROR "OpenMP was requested but not found on the system. Consider running cmake with -DCPPSTART_USE_OPENMP=OFF")
+    endif()
 endif()
 
 
-option(ENABLE_CATCH2 "Links the Unit-Test against catch2." ON)
-option(ENABLE_GTEST "Links the unit-tests against googletest" ON)
+# parallel - mpi
+if(CPPSTART_USE_MPI)
+    find_package(MPI)
+    if(NOT MPI_FOUND)
+        message(FATAL_ERROR "MPI was requested but not found on the system. Consider running cmake with -DCPPSTART_USE_MPI=OFF")
+    endif()
+endif()
+
+
+# logging library spdlog
+include(FetchContent)
+FetchContent_Declare(
+        spdlog
+        GIT_REPOSITORY https://github.com/gabime/spdlog.git
+        GIT_TAG        v1.8.1
+)
+FetchContent_MakeAvailable(spdlog)
+set_target_properties(spdlog PROPERTIES FOLDER ${third_folder})
+
 
 # unit-tests
-if(BUILD_UNIT_TESTS)
+if(CPPSTART_BUILD_UNIT_TESTS)
 
-    include(FetchContent)
+    # code coverage gcov
+    if (CPPSTART_ENABLE_COVERAGE AND ${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
+        list(APPEND COMPILER_FLAGS_CXX "--coverage")
+        list(APPEND LINK_OPTIONS "--coverage")
+    endif()
 
-    if(ENABLE_CATCH2)
+    # fetch catch2
+    if(CPPSTART_ENABLE_CATCH2)
         FetchContent_Declare(
                 Catch2
                 GIT_REPOSITORY https://github.com/catchorg/Catch2.git
@@ -91,7 +106,8 @@ if(BUILD_UNIT_TESTS)
         include(ParseAndAddCatchTests)
     endif()
 
-    if(ENABLE_GTEST)
+    # fetch googletest
+    if(CPPSTART_ENABLE_GTEST)
         set(gtest_force_shared_crt ON CACHE BOOL "" FORCE) # gtest link dynamic
 
         include(FetchContent)
@@ -116,15 +132,3 @@ if(BUILD_UNIT_TESTS)
     enable_testing()
 
 endif()
-
-# logging library spdlog
-include(FetchContent)
-FetchContent_Declare(
-        spdlog
-        GIT_REPOSITORY https://github.com/gabime/spdlog.git
-        GIT_TAG        v1.8.1
-)
-
-FetchContent_MakeAvailable(spdlog)
-
-set_target_properties(spdlog PROPERTIES FOLDER ${third_folder})

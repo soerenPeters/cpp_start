@@ -18,12 +18,15 @@ $ ctest
 ### CMake Options
 - BUILD_SHARED_LIBS : Build all targets as shared libraries in this project. (ON)
 - BUILD_WARNINGS_AS_ERRORS : Make all warnings into errors. (OFF)
-- BUILD_UNIT_TESTS : Create unit test targets. (ON)
-- BUILD_COVERAGE : Add the --coverage compiler flag. (OFF)  
-- BUILD_CLANG_TIDY : Enable clang-tidy checks. (OFF)
-- BUILD_CPPCHECK : Enable cppcheck.  (OFF)
-- BUILD_USE_OPENMP : use OpenMP. (OFF)
-- BUILD_USE_MPI : use MPI. (OFF)
+- CPPSTART_BUILD_UNIT_TESTS : Create unit test targets. (ON)
+- CPPSTART_ENABLE_CATCH2 : Fetch and link the unit-Test against catch2. (ON)
+- CPPSTART_ENABLE_GTEST : Fetch and link the unit-tests against googletest. (ON)
+- CPPSTART_ENABLE_COVERAGE : Add the --coverage compiler flag. (OFF)  
+- CPPSTART_ENABLE_CLANG_TIDY : Enable clang-tidy checks. (OFF)
+- CPPSTART_ENABLE_CPPCHECK : Enable cppcheck.  (OFF)
+- CPPSTART_ENABLE_INCLUDE_WHAT_YOU_USE: "Enable Include what you use. (OFF)
+- CPPSTART_USE_OPENMP : use OpenMP. (OFF)
+- CPPSTART_USE_MPI : use MPI. (OFF)
 
 ### Compiler flags
 Compiler flags can be set individually for each compiler in "CMake/compilerflags/[COMPILER_FLAGS_CXX](https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_ID.html) .cmake". 
