@@ -8,7 +8,7 @@
 
 #include <spdlog/spdlog.h>
 
-#include "kernel.cuh"
+#include "device/kernel.cuh"
 
 namespace cpp_start
 {

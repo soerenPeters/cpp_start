@@ -3,12 +3,11 @@ project(cuda_example LANGUAGES CUDA CXX)
 set(TARGET_NAME
         cuda_example)
 
-set(SOURCE_FILES
-        Cuda_example.cpp
-        kernel.cu)
+set(FIND_FILES_AUTOMATICALLY ON)
 
-set(TEST_FILES
-        test_cuda_example.cpp)
+set(SOURCE_FILES)
+
+set(TEST_FILES)
 
 set(PUBLIC_LINK)
 
