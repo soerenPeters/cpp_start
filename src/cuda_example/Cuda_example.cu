@@ -16,10 +16,29 @@ namespace cpp_start
 cudaError_t addWithCuda(int *c, const int *a, const int *b, unsigned int size);
 
 
-std::vector<double> Cuda_example::add(const std::vector<double>& a, const std::vector<double>& b) const
+std::vector<int> Cuda_example::add(const std::vector<int> &a, const std::vector<int> &b) const
 {
-    std::vector<double> result;
-    return {};
+    const auto size = a.size();
+    std::vector<int> result(size);
+
+
+    // Add vectors in parallel.
+    cudaError_t cudaStatus = addWithCuda(result.data(), a.data(), b.data(), size);
+    if (cudaStatus != cudaSuccess) {
+        fprintf(stderr, "addWithCuda failed!");
+        return {};
+    }
+
+
+    // cudaDeviceReset must be called before exiting in order for profiling and
+    // tracing tools such as Nsight and Visual Profiler to show complete traces.
+    cudaStatus = cudaDeviceReset();
+    if (cudaStatus != cudaSuccess) {
+        fprintf(stderr, "cudaDeviceReset failed!");
+        return {};
+    }
+
+    return result;
 }
 
 

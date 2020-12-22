@@ -15,7 +15,7 @@ namespace cpp_start
 class Cuda_example
 {
 public:
-    CUDA_EXAMPLE_EXPORT std::vector<double> add(const std::vector<double>& a, const std::vector<double>& b) const;
+    CUDA_EXAMPLE_EXPORT std::vector<int> add(const std::vector<int> &a, const std::vector<int> &b) const;
 
     CUDA_EXAMPLE_EXPORT void print() const;
 };
