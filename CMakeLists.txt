@@ -22,7 +22,7 @@ set(LINK_OPTIONS)
 include(CMake/cpp_starter.cmake)
 
 
-add_subdirectory(src/adder)
+add_subdirectory(src/catch_example)
 add_subdirectory(src/meta)
 
 if(BUILD_BOOST_EXAMPLE)

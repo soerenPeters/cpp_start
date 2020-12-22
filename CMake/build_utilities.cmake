@@ -242,11 +242,17 @@ function(_add_test)
     _add_target(
             NAME ${test_name}
             BUILDTYPE executable
-            PUBLIC_LINK gmock_main
+            PUBLIC_LINK ${UNIT_TESTS_LIBRARIES}
             PRIVATE_LINK ${TARGET_NAME}
             FILES ${TEST_FILES})
 
-    gtest_add_tests(TARGET ${test_name})
+    if(ENABLE_GTEST)
+        gtest_add_tests(TARGET ${test_name})
+    endif()
+    if(ENABLE_CATCH2)
+       # catch_discover_tests(${test_name})
+        ParseAndAddCatchTests(${test_name})
+    endif()
 
     set_target_properties(${test_name} PROPERTIES FOLDER ${test_folder})
 

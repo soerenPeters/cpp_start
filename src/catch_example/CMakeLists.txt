@@ -1,7 +1,7 @@
-project(Adder CXX)
+project(Catch_example CXX)
 
 set(TARGET_NAME
-        adder)
+        Catch_example)
 
 set(FIND_FILES_AUTOMATICALLY ON)
 
