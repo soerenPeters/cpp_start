@@ -4,6 +4,9 @@
 
 #include "Cuda_example.h"
 
+#include <sstream>
+#include <string>
+
 #include <cuda_runtime_api.h>
 
 #include <spdlog/spdlog.h>
@@ -15,20 +18,17 @@ namespace cpp_start
 
 cudaError_t addWithCuda(int *c, const int *a, const int *b, unsigned int size);
 
-
 std::vector<int> Cuda_example::add(const std::vector<int> &a, const std::vector<int> &b) const
 {
     const auto size = a.size();
     std::vector<int> result(size);
 
-
     // Add vectors in parallel.
-    cudaError_t cudaStatus = addWithCuda(result.data(), a.data(), b.data(), size);
+    cudaError_t cudaStatus = addWithCuda(result.data(), a.data(), b.data(), (unsigned int)size);
     if (cudaStatus != cudaSuccess) {
         fprintf(stderr, "addWithCuda failed!");
         return {};
     }
-
 
     // cudaDeviceReset must be called before exiting in order for profiling and
     // tracing tools such as Nsight and Visual Profiler to show complete traces.
@@ -41,28 +41,68 @@ std::vector<int> Cuda_example::add(const std::vector<int> &a, const std::vector<
     return result;
 }
 
-
-
-
-void Cuda_example::print() const
+int Cuda_example::getNumberOfDevices() const
 {
     int nDevices;
 
-  cudaGetDeviceCount(&nDevices);
-  for (int i = 0; i < nDevices; i++) {
-    cudaDeviceProp prop;
-    cudaGetDeviceProperties(&prop, i);
-    printf("Device Number: %d\n", i);
-    printf("  Device name: %s\n", prop.name);
-    printf("  Memory Clock Rate (KHz): %d\n",
-           prop.memoryClockRate);
-    printf("  Memory Bus Width (bits): %d\n",
-           prop.memoryBusWidth);
-    printf("  Peak Memory Bandwidth (GB/s): %f\n\n",
-           2.0*prop.memoryClockRate*(prop.memoryBusWidth/8)/1.0e6);
-  }
+    cudaGetDeviceCount(&nDevices);
+
+    return nDevices;
 }
 
+std::string Cuda_example::getDeviceName(int deviceNumber) const
+{
+    checkDeviceNumber(deviceNumber);
+
+    cudaDeviceProp prop;
+    cudaGetDeviceProperties(&prop, deviceNumber);
+
+    return { prop.name };
+}
+
+std::string Cuda_example::getComputeCapability(int deviceNumber) const
+{
+    checkDeviceNumber(deviceNumber);
+
+    cudaDeviceProp prop;
+    cudaGetDeviceProperties(&prop, deviceNumber);
+
+    std::stringstream cc;
+    cc << prop.major << "." << prop.minor;
+
+    return cc.str();
+}
+
+size_t Cuda_example::getTotalGlobalMemory(int deviceNumber) const
+{
+    checkDeviceNumber(deviceNumber);
+
+    cudaDeviceProp prop;
+    cudaGetDeviceProperties(&prop, deviceNumber);
+
+    return prop.totalGlobalMem;
+}
+
+double Cuda_example::getPeakMemoryBandwidth(int deviceNumber) const
+{
+    checkDeviceNumber(deviceNumber);
+
+    cudaDeviceProp prop;
+    cudaGetDeviceProperties(&prop, deviceNumber);
+
+    return 2.0 * prop.memoryClockRate * (prop.memoryBusWidth / 8) / 1.0e6;
+}
+
+void Cuda_example::checkDeviceNumber(int deviceNumber) const
+{
+    const auto numberOfDevices = getNumberOfDevices();
+
+    std::stringstream error_message;
+    error_message << "Device number " << deviceNumber << "not valid. Number of devices: " << numberOfDevices;
+
+    if (deviceNumber >= numberOfDevices)
+        throw std::runtime_error(error_message.str());
+}
 
 
 cudaError_t addWithCuda(int *c, const int *a, const int *b, unsigned int size)
@@ -144,6 +184,4 @@ Error:
     return cudaStatus;
 }
 
-
-
-}
+} // namespace cpp_start
