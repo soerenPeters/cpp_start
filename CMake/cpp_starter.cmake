@@ -65,26 +65,56 @@ if (BUILD_COVERAGE AND ${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
     list(APPEND LINK_OPTIONS "--coverage")
 endif()
 
+
+option(ENABLE_CATCH2 "Links the Unit-Test against catch2." ON)
+option(ENABLE_GTEST "Links the unit-tests against googletest" ON)
+
 # unit-tests
 if(BUILD_UNIT_TESTS)
-    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE) # gtest link dynamic
 
     include(FetchContent)
-    FetchContent_Declare(
-            googletest
-            GIT_REPOSITORY https://github.com/google/googletest.git
-            GIT_TAG        release-1.10.0
-    )
 
-    FetchContent_MakeAvailable(googletest)
+    if(ENABLE_CATCH2)
+        FetchContent_Declare(
+                Catch2
+                GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+                GIT_TAG        v2.13.3
+        )
 
-    set_target_properties(gmock PROPERTIES FOLDER ${third_folder})
-    set_target_properties(gmock_main PROPERTIES FOLDER ${third_folder})
-    set_target_properties(gtest PROPERTIES FOLDER ${third_folder})
-    set_target_properties(gtest_main PROPERTIES FOLDER ${third_folder})
+        FetchContent_MakeAvailable(Catch2)
+
+        list(APPEND UNIT_TESTS_LIBRARIES Catch2::Catch2)
+
+        # https://github.com/catchorg/Catch2/issues/2103
+        list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/contrib)
+        include(Catch)
+        include(ParseAndAddCatchTests)
+    endif()
+
+    if(ENABLE_GTEST)
+        set(gtest_force_shared_crt ON CACHE BOOL "" FORCE) # gtest link dynamic
+
+        include(FetchContent)
+        FetchContent_Declare(
+                googletest
+                GIT_REPOSITORY https://github.com/google/googletest.git
+                GIT_TAG        release-1.10.0
+        )
+
+        FetchContent_MakeAvailable(googletest)
+
+        set_target_properties(gmock PROPERTIES FOLDER ${third_folder})
+        set_target_properties(gmock_main PROPERTIES FOLDER ${third_folder})
+        set_target_properties(gtest PROPERTIES FOLDER ${third_folder})
+        set_target_properties(gtest_main PROPERTIES FOLDER ${third_folder})
+
+        include(GoogleTest)
+
+        list(APPEND UNIT_TESTS_LIBRARIES gmock_main)
+    endif()
 
     enable_testing()
-    include(GoogleTest)
+
 endif()
 
 # logging library spdlog
