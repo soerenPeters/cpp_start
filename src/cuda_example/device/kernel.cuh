@@ -7,7 +7,7 @@
 
 
 
-//__global__ void addKernel(int *c, const int *a, const int *b);
+__global__ void add_cuda_kernel(int *c, const int *a, const int *b);
 
 
 #endif // KERNEL
