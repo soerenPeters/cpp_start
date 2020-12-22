@@ -210,7 +210,7 @@ function(add_target)
     endif()
 
     # clang-tidy
-    if(BUILD_CLANG_TIDY)
+    if(CPPSTART_ENABLE_CLANG_TIDY)
         find_program(CLANG_TIDY_PROGRAM NAMES clang-tidy)
 
         if(NOT CLANG_TIDY_PROGRAM)
@@ -246,10 +246,10 @@ function(_add_test)
             PRIVATE_LINK ${TARGET_NAME}
             FILES ${TEST_FILES})
 
-    if(ENABLE_GTEST)
+    if(CPPSTART_ENABLE_GTEST)
         gtest_add_tests(TARGET ${test_name})
     endif()
-    if(ENABLE_CATCH2)
+    if(CPPSTART_ENABLE_CATCH2)
        # catch_discover_tests(${test_name})
         ParseAndAddCatchTests(${test_name})
     endif()
@@ -368,7 +368,7 @@ function(_add_target)
 
 
     # cppcheck
-    if(BUILD_CPPCHECK)
+    if(CPPSTART_ENABLE_CPPCHECK)
         find_program(CPPCHECK_PROGRAM NAMES cppcheck)
 
         if(NOT CPPCHECK_PROGRAM)
@@ -383,7 +383,7 @@ function(_add_target)
     endif()
 
     # include-what-you-use
-    if(BUILD_INCLUDE_WHAT_YOU_USE)
+    if(CPPSTART_ENABLE_INCLUDE_WHAT_YOU_USE)
         find_program(IWYU_PROGRAM NAMES include-what-you-use iwyu)
 
         if(NOT IWYU_PROGRAM)
