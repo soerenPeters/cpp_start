@@ -31,3 +31,15 @@ endif()
 
 add_subdirectory(src/openmp_example)
 add_subdirectory(src/mpi_example)
+
+include(CheckLanguage)
+check_language(CUDA)
+
+if(CMAKE_CUDA_COMPILER)
+    set(CMAKE_CUDA_STANDARD 11)
+    set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+
+    set(CMAKE_CUDA_ARCHITECTURES 30)
+
+    add_subdirectory(src/cuda_example)
+endif()
