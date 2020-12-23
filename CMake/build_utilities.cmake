@@ -156,9 +156,13 @@ macro(link_boost)
     cmake_parse_arguments( ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
 
     set(Boost_USE_MULTITHREADED ON)
-
     set(Boost_USE_STATIC_LIBS OFF)
     set(Boost_USE_STATIC_RUNTIME OFF)
+
+    if(NOT BUILD_SHARED_LIBS)
+        set(Boost_USE_STATIC_LIBS ON)
+        set(Boost_USE_STATIC_RUNTIME ON)
+    endif()
 
     # disable auto linking in boost
     if (WIN32)
@@ -175,6 +179,29 @@ macro(link_boost)
 
 endmacro()
 
+######################################################################################################################
+## When OpenMP was found the library is added to the private link libraries.                                        ##
+##                                                                                                                  ##
+######################################################################################################################
+macro(linkOpenMP)
+    if(OpenMP_CXX_FOUND)
+        list(APPEND PRIVATE_LINK
+                OpenMP::OpenMP_CXX)
+    endif()
+endmacro()
+
+######################################################################################################################
+## When MPI was found the library is added to the private link libraries.                                           ##
+## Additionally _MPI is added to the compiler definitions.                                                          ##
+######################################################################################################################
+macro(linkMPI)
+    if(MPI_FOUND)
+        list(APPEND PRIVATE_LINK
+                MPI::MPI_CXX)
+
+        list(APPEND COMPILER_DEFINITION _MPI)
+    endif()
+endmacro()
 
 #################################################################################
 ## Add a target with the name TARGET_NAME and add SOURCE_FILES.
