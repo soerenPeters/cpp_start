@@ -1,23 +1,4 @@
 #################################################################################
-## set global project file endings
-#################################################################################
-list(APPEND GLOB_FILE_ENDINGS
-        *.cpp
-        *.c
-        *.h
-        *.cu
-        *.cuh
-        *.hpp )
-
-#################################################################################
-## set test files identifier
-#################################################################################
-list(APPEND TEST_FILES_IDENTIFIER
-        test_
-        mock_
-        )
-
-#################################################################################
 ## helper
 #################################################################################
 function(status msg)
@@ -91,7 +72,7 @@ endmacro()
 ## NOTE: cmake warns to set all files manually https://cmake.org/cmake/help/latest/command/file.html#glob-recurse   ##
 ######################################################################################################################
 macro(find_files_recursively)
-    file(GLOB_RECURSE all_files ${GLOB_FILE_ENDINGS})
+    file(GLOB_RECURSE all_files ${CS_GLOB_FILE_ENDINGS})
 
     # iterate over all found files
     foreach(file ${all_files})
@@ -101,7 +82,7 @@ macro(find_files_recursively)
         set(is_test_file false)
 
         if(NOT DEFINED ADD_TEST_FILES_TO_MAIN_TARGET) # add test files to test target
-            foreach(test_identifier ${TEST_FILES_IDENTIFIER})
+            foreach(test_identifier ${CS_TEST_FILES_IDENTIFIER})
                 if(${file_name} MATCHES ${test_identifier})
                     list(APPEND TEST_FILES ${file})
                     set(is_test_file true)

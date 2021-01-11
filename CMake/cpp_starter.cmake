@@ -41,8 +41,23 @@ set(test_folder "tests")
 set(third_folder "3rd")
 
 
+# set global project file endings for automatic file finding
+list(APPEND CS_GLOB_FILE_ENDINGS
+        *.cpp
+        *.c
+        *.h
+        *.cu
+        *.cuh
+        *.hpp )
+
+# set test files identifier for automatic file finding
+list(APPEND CS_TEST_FILES_IDENTIFIER
+        test_
+        mock_ )
+
+
 # include helper functions
-include(${CMAKE_CURRENT_LIST_DIR}/build_utilities.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/macros.cmake)
 
 
 # load additional files
