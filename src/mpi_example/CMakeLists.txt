@@ -13,13 +13,6 @@ set(PUBLIC_LINK)
 
 set(PRIVATE_LINK)
 
-if(MPI_FOUND)
-    list(APPEND PRIVATE_LINK
-            MPI::MPI_CXX)
-endif()
+linkMPI()
 
 add_target()
-
-if(MPI_FOUND)
-    target_compile_definitions(MPI_example PRIVATE _MPI)
-endif()

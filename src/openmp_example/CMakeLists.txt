@@ -13,9 +13,6 @@ set(PUBLIC_LINK)
 
 set(PRIVATE_LINK)
 
-if(OpenMP_CXX_FOUND)
-    list(APPEND PRIVATE_LINK
-            OpenMP::OpenMP_CXX)
-endif()
+linkOpenMP()
 
 add_target()
