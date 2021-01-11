@@ -10,20 +10,28 @@ set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER ".cmake")
 option(CMAKE_VERBOSE_OUTPUT "Enable additional CMake output per target." ON)
 
 option(BUILD_SHARED_LIBS "Build all targets as shared libs in this project." ON)
-option(BUILD_WARNINGS_AS_ERRORS "Make all warnings into errors." OFF)
 
 
-option(CPPSTART_USE_OPENMP "use OpenMP" OFF)
-option(CPPSTART_USE_MPI "use MPI" OFF)
+option(CS_USE_OPENMP "use OpenMP" OFF)
+option(CS_USE_MPI "use MPI" OFF)
 
-option(CPPSTART_BUILD_UNIT_TESTS "Add the unit test targets." ON)
-option(CPPSTART_ENABLE_CATCH2 "Links the Unit-Test against catch2." ON)
-option(CPPSTART_ENABLE_GTEST "Links the unit-tests against googletest." ON)
-option(CPPSTART_ENABLE_COVERAGE "Add the --coverage compiler flag." OFF)
-option(CPPSTART_ENABLE_CLANG_TIDY "Enable clang-tidy checks." OFF)
-option(CPPSTART_ENABLE_CPPCHECK "Enable cppcheck." OFF)
-option(CPPSTART_ENABLE_INCLUDE_WHAT_YOU_USE "Enable Include what you use." OFF)
+option(CS_BUILD_WARNINGS_AS_ERRORS "Make all warnings into errors." OFF)
+option(CS_BUILD_UNIT_TESTS "Add the unit test targets." ON)
 
+option(CS_ENABLE_CATCH2 "Links the Unit-Test against catch2." ON)
+option(CS_ENABLE_GTEST "Links the unit-tests against googletest." ON)
+option(CS_ENABLE_COVERAGE "Add the --coverage compiler flag." OFF)
+option(CS_ENABLE_CLANG_TIDY "Enable clang-tidy checks." OFF)
+option(CS_ENABLE_CPPCHECK "Enable cppcheck." OFF)
+option(CS_ENABLE_INCLUDE_WHAT_YOU_USE "Enable Include what you use." OFF)
+
+
+# cpp flags and options
+set(CS_COMPILER_FLAGS_CXX)
+set(CS_COMPILER_FLAGS_CXX_DEBUG)
+set(CS_COMPILER_FLAGS_CXX_RELEASE)
+set(CS_COMPILER_DEFINITION)
+set(CS_LINK_OPTIONS)
 
 
 # set IDE folder group names
@@ -33,8 +41,23 @@ set(test_folder "tests")
 set(third_folder "3rd")
 
 
+# set global project file endings for automatic file finding
+list(APPEND CS_GLOB_FILE_ENDINGS
+        *.cpp
+        *.c
+        *.h
+        *.cu
+        *.cuh
+        *.hpp )
+
+# set test files identifier for automatic file finding
+list(APPEND CS_TEST_FILES_IDENTIFIER
+        test_
+        mock_ )
+
+
 # include helper functions
-include(${CMAKE_CURRENT_LIST_DIR}/build_utilities.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/macros.cmake)
 
 
 # load additional files
@@ -51,19 +74,19 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>${WIN_SHARE
 
 
 # parallel - openmp
-if(CPPSTART_USE_OPENMP)
+if(CS_USE_OPENMP)
     find_package(OpenMP)
     if(NOT OpenMP_CXX_FOUND)
-        message(FATAL_ERROR "OpenMP was requested but not found on the system. Consider running cmake with -DCPPSTART_USE_OPENMP=OFF")
+        message(FATAL_ERROR "OpenMP was requested but not found on the system. Consider running cmake with -DCS_USE_OPENMP=OFF")
     endif()
 endif()
 
 
 # parallel - mpi
-if(CPPSTART_USE_MPI)
+if(CS_USE_MPI)
     find_package(MPI)
     if(NOT MPI_FOUND)
-        message(FATAL_ERROR "MPI was requested but not found on the system. Consider running cmake with -DCPPSTART_USE_MPI=OFF")
+        message(FATAL_ERROR "MPI was requested but not found on the system. Consider running cmake with -DCS_USE_MPI=OFF")
     endif()
 endif()
 
@@ -80,16 +103,16 @@ set_target_properties(spdlog PROPERTIES FOLDER ${third_folder})
 
 
 # unit-tests
-if(CPPSTART_BUILD_UNIT_TESTS)
+if(CS_BUILD_UNIT_TESTS)
 
     # code coverage gcov
-    if (CPPSTART_ENABLE_COVERAGE AND ${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
-        list(APPEND COMPILER_FLAGS_CXX "--coverage")
-        list(APPEND LINK_OPTIONS "--coverage")
+    if (CS_ENABLE_COVERAGE AND ${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
+        list(APPEND CS_COMPILER_FLAGS_CXX "--coverage")
+        list(APPEND CS_LINK_OPTIONS "--coverage")
     endif()
 
     # fetch catch2
-    if(CPPSTART_ENABLE_CATCH2)
+    if(CS_ENABLE_CATCH2)
         FetchContent_Declare(
                 Catch2
                 GIT_REPOSITORY https://github.com/catchorg/Catch2.git
@@ -107,7 +130,7 @@ if(CPPSTART_BUILD_UNIT_TESTS)
     endif()
 
     # fetch googletest
-    if(CPPSTART_ENABLE_GTEST)
+    if(CS_ENABLE_GTEST)
         set(gtest_force_shared_crt ON CACHE BOOL "" FORCE) # gtest link dynamic
 
         include(FetchContent)

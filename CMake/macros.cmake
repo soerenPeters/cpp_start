@@ -1,23 +1,4 @@
 #################################################################################
-## set global project file endings
-#################################################################################
-list(APPEND GLOB_FILE_ENDINGS
-        *.cpp
-        *.c
-        *.h
-        *.cu
-        *.cuh
-        *.hpp )
-
-#################################################################################
-## set test files identifier
-#################################################################################
-list(APPEND TEST_FILES_IDENTIFIER
-        test_
-        mock_
-        )
-
-#################################################################################
 ## helper
 #################################################################################
 function(status msg)
@@ -46,16 +27,15 @@ endfunction(generateExportHeader)
 #########################################################################################
 macro(load_machine_file)
 
-    execute_process(COMMAND hostname OUTPUT_VARIABLE MACHINE_NAME)
-    string(REGEX REPLACE "[ ]*([A-Za-z0-9]+).*[\\\\n]*" "\\1" MACHINE_NAME "${MACHINE_NAME}" )
+    site_name(MACHINE_NAME)
 
     if(NOT DEFINED BUILD_MACHINE_FILE_PATH)
-        status("Use intern compiler flags: ${CMAKE_CURRENT_LIST_DIR}/machinefiles/")
+        status("Use intern machine files: ${CMAKE_CURRENT_LIST_DIR}/machinefiles/")
         status("For self-written machine files, the variable BUILD_MACHINE_FILE_PATH must be set.")
         set(BUILD_MACHINE_FILE_PATH "${CMAKE_CURRENT_LIST_DIR}/machinefiles/")
     endif()
 
-    set(MACHINE_FILE "${BUILD_MACHINE_FILE_PATH}/${MACHINE_NAME}.cmake")
+    set(MACHINE_FILE "${BUILD_MACHINE_FILE_PATH}/${MACHINE_NAME}.config.cmake")
 
     IF(NOT EXISTS ${MACHINE_FILE})
         status("No configuration file found: ${MACHINE_FILE}.")
@@ -92,7 +72,7 @@ endmacro()
 ## NOTE: cmake warns to set all files manually https://cmake.org/cmake/help/latest/command/file.html#glob-recurse   ##
 ######################################################################################################################
 macro(find_files_recursively)
-    file(GLOB_RECURSE all_files ${GLOB_FILE_ENDINGS})
+    file(GLOB_RECURSE all_files ${CS_GLOB_FILE_ENDINGS})
 
     # iterate over all found files
     foreach(file ${all_files})
@@ -102,7 +82,7 @@ macro(find_files_recursively)
         set(is_test_file false)
 
         if(NOT DEFINED ADD_TEST_FILES_TO_MAIN_TARGET) # add test files to test target
-            foreach(test_identifier ${TEST_FILES_IDENTIFIER})
+            foreach(test_identifier ${CS_TEST_FILES_IDENTIFIER})
                 if(${file_name} MATCHES ${test_identifier})
                     list(APPEND TEST_FILES ${file})
                     set(is_test_file true)
@@ -202,7 +182,7 @@ macro(linkMPI)
         list(APPEND PRIVATE_LINK
                 MPI::MPI_CXX)
 
-        list(APPEND COMPILER_DEFINITION _MPI)
+        list(APPEND CS_COMPILER_DEFINITION _MPI)
     endif()
 endmacro()
 
@@ -240,7 +220,7 @@ function(add_target)
     endif()
 
     # clang-tidy
-    if(CPPSTART_ENABLE_CLANG_TIDY)
+    if(CS_ENABLE_CLANG_TIDY)
         find_program(CLANG_TIDY_PROGRAM NAMES clang-tidy)
 
         if(NOT CLANG_TIDY_PROGRAM)
@@ -276,10 +256,10 @@ function(_add_test)
             PRIVATE_LINK ${TARGET_NAME}
             FILES ${TEST_FILES})
 
-    if(CPPSTART_ENABLE_GTEST)
+    if(CS_ENABLE_GTEST)
         gtest_add_tests(TARGET ${test_name})
     endif()
-    if(CPPSTART_ENABLE_CATCH2)
+    if(CS_ENABLE_CATCH2)
        # catch_discover_tests(${test_name})
         ParseAndAddCatchTests(${test_name})
     endif()
@@ -360,33 +340,33 @@ function(_add_target)
     # link spdlog
     target_link_libraries(${ARG_NAME} PRIVATE spdlog)
 
-    status_lib("additional compiler flags CXX: ${COMPILER_FLAGS_CXX}")
-    status_lib("additional compiler flags CXX DEBUG: ${COMPILER_FLAGS_CXX_DEBUG}")
-    status_lib("additional compiler flags CXX RELEASE: ${COMPILER_FLAGS_CXX_RELEASE}")
+    status_lib("additional compiler flags CXX: ${CS_COMPILER_FLAGS_CXX}")
+    status_lib("additional compiler flags CXX DEBUG: ${CS_COMPILER_FLAGS_CXX_DEBUG}")
+    status_lib("additional compiler flags CXX RELEASE: ${CS_COMPILER_FLAGS_CXX_RELEASE}")
 
-    status_lib("compile definitions: ${COMPILER_DEFINITION}")
-    status_lib("link options: ${LINK_OPTIONS}")
+    status_lib("compile definitions: ${CS_COMPILER_DEFINITION}")
+    status_lib("link options: ${CS_LINK_OPTIONS}")
 
     # compiler flags
-    foreach(flag IN LISTS COMPILER_FLAGS_CXX)
+    foreach(flag IN LISTS CS_COMPILER_FLAGS_CXX)
         target_compile_options(${ARG_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${flag}>")
     endforeach()
 
-    foreach(flag IN LISTS COMPILER_FLAGS_CXX_DEBUG)
+    foreach(flag IN LISTS CS_COMPILER_FLAGS_CXX_DEBUG)
         target_compile_options(${ARG_NAME} PRIVATE "$<$<AND:$<COMPILE_LANGUAGE:CXX>,$<CONFIG:DEBUG>>:${flag}>")
     endforeach()
 
-    foreach(flag IN LISTS COMPILER_FLAGS_CXX_RELEASE)
+    foreach(flag IN LISTS CS_COMPILER_FLAGS_CXX_RELEASE)
         target_compile_options(${ARG_NAME} PRIVATE "$<$<AND:$<COMPILE_LANGUAGE:CXX>,$<CONFIG:RELEASE>>:${flag}>")
     endforeach()
 
     # compile definitions
-    foreach(flag IN LISTS COMPILER_DEFINITION)
+    foreach(flag IN LISTS CS_COMPILER_DEFINITION)
         target_compile_definitions(${ARG_NAME} PRIVATE ${flag})
     endforeach()
 
     # link options
-    foreach(flag IN LISTS LINK_OPTIONS)
+    foreach(flag IN LISTS CS_LINK_OPTIONS)
         target_link_options(${ARG_NAME} PRIVATE ${flag})
     endforeach()
 
@@ -398,7 +378,7 @@ function(_add_target)
 
 
     # cppcheck
-    if(CPPSTART_ENABLE_CPPCHECK)
+    if(CS_ENABLE_CPPCHECK)
         find_program(CPPCHECK_PROGRAM NAMES cppcheck)
 
         if(NOT CPPCHECK_PROGRAM)
@@ -413,7 +393,7 @@ function(_add_target)
     endif()
 
     # include-what-you-use
-    if(CPPSTART_ENABLE_INCLUDE_WHAT_YOU_USE)
+    if(CS_ENABLE_INCLUDE_WHAT_YOU_USE)
         find_program(IWYU_PROGRAM NAMES include-what-you-use iwyu)
 
         if(NOT IWYU_PROGRAM)

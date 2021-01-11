@@ -7,12 +7,6 @@ option(BUILD_BOOST_EXAMPLE "Build the boost example." OFF)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(COMPILER_FLAGS_CXX)
-set(COMPILER_FLAGS_CXX_DEBUG)
-set(COMPILER_FLAGS_CXX_RELEASE)
-set(COMPILER_DEFINITION)
-set(LINK_OPTIONS)
-
 # Set this variable to the path with the self-written compiler flag files.
 # set(BUILD_COMPILER_FILE_PATH "${CMAKE_CURRENT_LIST_DIR}/path/to/my/flags/")
 
