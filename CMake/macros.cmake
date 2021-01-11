@@ -367,7 +367,7 @@ function(_add_target)
 
     # link options
     foreach(flag IN LISTS CS_LINK_OPTIONS)
-        target_CS_LINK_OPTIONS(${ARG_NAME} PRIVATE ${flag})
+        target_link_options(${ARG_NAME} PRIVATE ${flag})
     endforeach()
 
     # export header
