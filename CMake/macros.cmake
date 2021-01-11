@@ -247,7 +247,7 @@ endfunction()
 
 function(_add_test)
 
-    set(test_name ${TARGET_NAME}Test)
+    set(test_name ${TARGET_NAME}Tests)
 
     _add_target(
             NAME ${test_name}
