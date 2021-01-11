@@ -100,12 +100,15 @@ macro(find_files_recursively)
 
         # check if is a test files
         set(is_test_file false)
-        foreach(test_identifier ${TEST_FILES_IDENTIFIER})
-            if(${file_name} MATCHES ${test_identifier})
-                list(APPEND TEST_FILES ${file})
-                set(is_test_file true)
-            endif()
-        endforeach()
+
+        if(NOT DEFINED ADD_TEST_FILES_TO_MAIN_TARGET) # add test files to test target
+            foreach(test_identifier ${TEST_FILES_IDENTIFIER})
+                if(${file_name} MATCHES ${test_identifier})
+                    list(APPEND TEST_FILES ${file})
+                    set(is_test_file true)
+                endif()
+            endforeach()
+        endif()
 
         # else the file is passed to the source files
         if(NOT is_test_file)
