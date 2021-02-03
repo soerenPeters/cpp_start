@@ -55,6 +55,16 @@ list(APPEND CS_TEST_FILES_IDENTIFIER
         test_
         mock_ )
 
+# 3rd Party dependencies
+if(NOT DEFINED spdlog_version)
+    set(spdlog_version "v1.8.1")
+endif()
+if(NOT DEFINED googletest_version)
+    set(googletest_version "master")
+endif()
+if(NOT DEFINED catch2_version)
+    set(catch2_version "v2.13.4")
+endif()
 
 # include helper functions
 include(${CMAKE_CURRENT_LIST_DIR}/macros.cmake)
@@ -93,10 +103,11 @@ endif()
 
 # logging library spdlog
 include(FetchContent)
+message(STATUS "Fetching spdlog")
 FetchContent_Declare(
         spdlog
         GIT_REPOSITORY https://github.com/gabime/spdlog.git
-        GIT_TAG        v1.8.1
+        GIT_TAG        ${spdlog_version}
 )
 FetchContent_MakeAvailable(spdlog)
 set_target_properties(spdlog PROPERTIES FOLDER ${third_folder})
@@ -113,10 +124,11 @@ if(CS_BUILD_UNIT_TESTS)
 
     # fetch catch2
     if(CS_ENABLE_CATCH2)
+        message(STATUS "Fetching Catch2: ${catch2_version}")
         FetchContent_Declare(
                 Catch2
                 GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-                GIT_TAG        v2.13.3
+                GIT_TAG        ${catch2_version}
         )
 
         FetchContent_MakeAvailable(Catch2)
@@ -134,10 +146,11 @@ if(CS_BUILD_UNIT_TESTS)
         set(gtest_force_shared_crt ON CACHE BOOL "" FORCE) # gtest link dynamic
 
         include(FetchContent)
+        message(STATUS "Fetching googletest: ${googletest_version}")
         FetchContent_Declare(
                 googletest
                 GIT_REPOSITORY https://github.com/google/googletest.git
-                GIT_TAG        release-1.10.0
+                GIT_TAG        ${googletest_version}
         )
 
         FetchContent_MakeAvailable(googletest)
