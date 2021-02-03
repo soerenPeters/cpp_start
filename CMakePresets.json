@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 19,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "default",
+      "hidden": true,
+      "binaryDir": "${sourceDir}/build/",
+      "cacheVariables": {
+        "CS_BUILD_UNIT_TESTS": "ON",
+        "CS_ENABLE_GTEST": "ON"
+      }
+    },
+    {
+      "name": "default_make",
+      "inherits": "default",
+      "displayName": "Unix Make Default Config",
+      "description": "Default build using Unix Makefiles",
+      "generator": "Unix Makefiles"
+    },
+    {
+      "name": "default_ccache_make",
+      "inherits": "default_make",
+      "displayName": "CCache Default Config",
+      "description": "Default build using ccache",
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
+        "CMAKE_CUDA_COMPILER_LAUNCHER": "ccache",
+        "CMAKE_C_COMPILER_LAUNCHER": "ccache"
+      }
+    },
+    {
+      "name": "default_msvc",
+      "inherits": "default",
+      "displayName": "MSVC Default Config",
+      "description": "Default build using MSVC 16 x64",
+      "generator": "Visual Studio 16 2019",
+      "architecture": "x64"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.15..3.19 FATAL_ERROR)
 
 project(CppStart CXX)
 
@@ -30,10 +30,13 @@ include(CheckLanguage)
 check_language(CUDA)
 
 if(CMAKE_CUDA_COMPILER)
+    message(STATUS "CUDA found: ${CMAKE_CUDA_COMPILER}. Adding cuda example.")
     set(CMAKE_CUDA_STANDARD 11)
     set(CMAKE_CUDA_STANDARD_REQUIRED ON)
 
     set(CMAKE_CUDA_ARCHITECTURES 30)
 
     add_subdirectory(src/cuda_example)
+else()
+    message(STATUS "CUDA not found. Skipping cuda example.")
 endif()
