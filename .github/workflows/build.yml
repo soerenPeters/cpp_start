@@ -12,8 +12,19 @@ jobs:
       - name: Get specific version CMake, v3.19.2
         uses: lukka/get-cmake@v3.19.2
 
+      - name: Download Conan package manager.
+        run: |
+           pwd
+           pip3 install conan
+           export PATH=$PATH:/home/runner/.local/bin
+           echo $PATH
+           conan --version
+           ls
+      - name: install conan packages
+        run: mkdir build && cd build && conan install ..
+
       - name: configure
-        run: cmake --version && mkdir build && cd build && cmake .. -DCS_BUILD_WARNINGS_AS_ERRORS=ON
+        run: cmake --version && cd build && cmake .. -DCS_BUILD_WARNINGS_AS_ERRORS=ON
 
       - name: build
         run: cmake --build build --config Debug

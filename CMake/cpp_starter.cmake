@@ -18,8 +18,6 @@ option(CS_USE_MPI "use MPI" OFF)
 option(CS_BUILD_WARNINGS_AS_ERRORS "Make all warnings into errors." OFF)
 option(CS_BUILD_UNIT_TESTS "Add the unit test targets." ON)
 
-option(CS_ENABLE_CATCH2 "Links the Unit-Test against catch2." ON)
-option(CS_ENABLE_GTEST "Links the unit-tests against googletest." ON)
 option(CS_ENABLE_COVERAGE "Add the --coverage compiler flag." OFF)
 option(CS_ENABLE_CLANG_TIDY "Enable clang-tidy checks." OFF)
 option(CS_ENABLE_CPPCHECK "Enable cppcheck." OFF)
@@ -55,16 +53,6 @@ list(APPEND CS_TEST_FILES_IDENTIFIER
         test_
         mock_ )
 
-# 3rd Party dependencies
-if(NOT DEFINED spdlog_version)
-    set(spdlog_version "v1.8.1")
-endif()
-if(NOT DEFINED googletest_version)
-    set(googletest_version "master")
-endif()
-if(NOT DEFINED catch2_version)
-    set(catch2_version "v2.13.4")
-endif()
 
 # include helper functions
 include(${CMAKE_CURRENT_LIST_DIR}/macros.cmake)
@@ -101,17 +89,22 @@ if(CS_USE_MPI)
 endif()
 
 
-# logging library spdlog
-include(FetchContent)
-message(STATUS "Fetching spdlog")
-FetchContent_Declare(
-        spdlog
-        GIT_REPOSITORY https://github.com/gabime/spdlog.git
-        GIT_TAG        ${spdlog_version}
-)
-FetchContent_MakeAvailable(spdlog)
-set_target_properties(spdlog PROPERTIES FOLDER ${third_folder})
 
+# conan
+if(NOT EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+    MESSAGE(FATAL_ERROR "conanbuildinfo.cmake not found. Probably missing: conan install .. ")
+endif()
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup(KEEP_RPATHS)
+
+if(APPLE)
+    set(CMAKE_INSTALL_RPATH "@executable_path/../lib")
+else()
+    set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
+endif()
+set(CMAKE_BUILD_WITH_INSTALL_RPATH ON) # <-- this is the line which is missing in the Conan documentation!
+
+message(STATUS "conan libraries found: ${CONAN_LIBS}")
 
 # unit-tests
 if(CS_BUILD_UNIT_TESTS)
@@ -122,48 +115,10 @@ if(CS_BUILD_UNIT_TESTS)
         list(APPEND CS_LINK_OPTIONS "--coverage")
     endif()
 
-    # fetch catch2
-    if(CS_ENABLE_CATCH2)
-        message(STATUS "Fetching Catch2: ${catch2_version}")
-        FetchContent_Declare(
-                Catch2
-                GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-                GIT_TAG        ${catch2_version}
-        )
+    include(Catch)
+    include(GoogleTest)
 
-        FetchContent_MakeAvailable(Catch2)
-
-        list(APPEND UNIT_TESTS_LIBRARIES Catch2::Catch2)
-
-        # https://github.com/catchorg/Catch2/issues/2103
-        list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/contrib)
-        include(Catch)
-        include(ParseAndAddCatchTests)
-    endif()
-
-    # fetch googletest
-    if(CS_ENABLE_GTEST)
-        set(gtest_force_shared_crt ON CACHE BOOL "" FORCE) # gtest link dynamic
-
-        include(FetchContent)
-        message(STATUS "Fetching googletest: ${googletest_version}")
-        FetchContent_Declare(
-                googletest
-                GIT_REPOSITORY https://github.com/google/googletest.git
-                GIT_TAG        ${googletest_version}
-        )
-
-        FetchContent_MakeAvailable(googletest)
-
-        set_target_properties(gmock PROPERTIES FOLDER ${third_folder})
-        set_target_properties(gmock_main PROPERTIES FOLDER ${third_folder})
-        set_target_properties(gtest PROPERTIES FOLDER ${third_folder})
-        set_target_properties(gtest_main PROPERTIES FOLDER ${third_folder})
-
-        include(GoogleTest)
-
-        list(APPEND UNIT_TESTS_LIBRARIES gmock_main)
-    endif()
+    list(APPEND UNIT_TESTS_LIBRARIES gmock_main gmock gtest)
 
     enable_testing()
 

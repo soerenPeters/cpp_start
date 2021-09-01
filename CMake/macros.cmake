@@ -218,7 +218,7 @@ function(add_target)
             PRIVATE_LINK ${PRIVATE_LINK}
             FILES ${SOURCE_FILES})
 
-    if(DEFINED TEST_FILES)
+    if(CS_BUILD_UNIT_TESTS AND DEFINED TEST_FILES)
         _add_test()
     endif()
 
@@ -263,8 +263,7 @@ function(_add_test)
         gtest_add_tests(TARGET ${test_name})
     endif()
     if(CS_ENABLE_CATCH2)
-       # catch_discover_tests(${test_name})
-        ParseAndAddCatchTests(${test_name})
+        catch_discover_tests(${test_name})
     endif()
 
     set_target_properties(${test_name} PROPERTIES FOLDER ${test_folder})
@@ -340,8 +339,8 @@ function(_add_target)
         target_link_libraries(${ARG_NAME} PRIVATE ${ARG_PRIVATE_LINK})
     endif()
 
-    # link spdlog
-    target_link_libraries(${ARG_NAME} PRIVATE spdlog)
+    # link spdlog (spdlog requires fmt)
+    target_link_libraries(${ARG_NAME} PRIVATE spdlog fmt)
 
     status_lib("additional compiler flags CXX: ${CS_COMPILER_FLAGS_CXX}")
     status_lib("additional compiler flags CXX DEBUG: ${CS_COMPILER_FLAGS_CXX_DEBUG}")
