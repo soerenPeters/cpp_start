@@ -6,6 +6,7 @@ boost/1.76.0
 
 [generators]
 cmake
+cmake_find_package_multi
 
 [imports]
 bin, *.dll -> ./bin # Copies all dll files from packages bin folder to my "bin" folder

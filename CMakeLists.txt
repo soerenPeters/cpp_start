@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 3.15..3.21 FATAL_ERROR)
 
 project(CppStart CXX)
 
-option(BUILD_BOOST_EXAMPLE "Build the boost example." OFF)
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -18,14 +16,11 @@ include(CMake/cpp_starter.cmake)
 
 add_subdirectory(src/catch_example)
 add_subdirectory(src/meta)
-
-if(BUILD_BOOST_EXAMPLE)
-    add_subdirectory(src/boost_example)
-endif()
-
+add_subdirectory(src/boost_example)
 add_subdirectory(src/openmp_example)
 add_subdirectory(src/mpi_example)
 
+# cuda
 include(CheckLanguage)
 check_language(CUDA)
 

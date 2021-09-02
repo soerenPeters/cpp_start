@@ -138,26 +138,24 @@ macro(link_boost)
     set( multiValueArgs COMPONENTS)
     cmake_parse_arguments( ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
 
-    set(Boost_USE_MULTITHREADED ON)
-    set(Boost_USE_STATIC_LIBS OFF)
-    set(Boost_USE_STATIC_RUNTIME OFF)
+    # set(Boost_USE_MULTITHREADED ON)
+    # set(Boost_USE_STATIC_LIBS OFF)
+    # set(Boost_USE_STATIC_RUNTIME OFF)
 
-    if(NOT BUILD_SHARED_LIBS)
-        set(Boost_USE_STATIC_LIBS ON)
+    # if(NOT BUILD_SHARED_LIBS)
+    #     set(Boost_USE_STATIC_LIBS ON)
 
-        if(WIN32)
-            set(Boost_USE_STATIC_RUNTIME ON)
-        endif()
-    endif()
+    #     if(WIN32)
+    #         set(Boost_USE_STATIC_RUNTIME ON)
+    #     endif()
+    # endif()
 
-    # disable auto linking in boost
-    if (WIN32)
-        add_definitions( -DBOOST_ALL_NO_LIB )
-    endif()
+    # # disable auto linking in boost
+    # if (WIN32)
+    #     add_definitions( -DBOOST_ALL_NO_LIB )
+    # endif()
 
-
-    find_package(Boost ${ARG_VERSION} REQUIRED COMPONENTS ${ARG_COMPONENTS})
-    message(STATUS "Found Boost version: ${Boost_VERSION}")
+    find_package(Boost ${ARG_VERSION})
 
     foreach(component ${ARG_COMPONENTS})
         list(APPEND PRIVATE_LINK Boost::${component})
@@ -259,12 +257,10 @@ function(_add_test)
             PRIVATE_LINK ${TARGET_NAME}
             FILES ${TEST_FILES})
 
-    if(CS_ENABLE_GTEST)
-        gtest_add_tests(TARGET ${test_name})
-    endif()
-    if(CS_ENABLE_CATCH2)
-        catch_discover_tests(${test_name})
-    endif()
+
+    gtest_add_tests(TARGET ${test_name})
+
+    catch_discover_tests(${test_name})
 
     set_target_properties(${test_name} PROPERTIES FOLDER ${test_folder})
 

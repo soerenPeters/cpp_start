@@ -19,8 +19,8 @@ TEST(MetaTest, getGitCommitHash)
 
     EXPECT_TRUE(gitCommitHash);
 
-    // git commit hash length: 40 characters.
-    EXPECT_THAT(strlen(gitCommitHash), testing::Eq(40));
+    const size_t expected_git_hash_length = 40;
+    EXPECT_THAT(strlen(gitCommitHash), testing::Eq(expected_git_hash_length));
 
     spdlog::info("Git commit hash: {0}", gitCommitHash);
 }

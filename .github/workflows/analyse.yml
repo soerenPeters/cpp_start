@@ -14,13 +14,18 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y gcovr
           gcovr --version
-          sudo apt-get install -y libboost-filesystem1.71-dev
+
+      - name: Download Conan package manager.
+        run: |
+           pip3 install conan
+           export PATH=$PATH:/home/runner/.local/bin
+           conan --version
 
       - name: build
         run: |
           mkdir build
           cd build
-          cmake .. -DCS_ENABLE_COVERAGE=ON -DCS_USE_OPENMP=ON -DBUILD_BOOST_EXAMPLE=ON
+          cmake .. -DCS_ENABLE_COVERAGE=ON -DCS_USE_OPENMP=ON
           make
           ctest
 
@@ -124,10 +129,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: install boost
+      - name: Download Conan package manager.
         run: |
-          apt-get update -y
-          apt-get install -y libboost-filesystem1.71-dev
+           pip3 install conan
+           export PATH=$PATH:/home/runner/.local/bin
+           conan --version
 
       - name: install iwyu
         run: |
@@ -176,6 +182,12 @@ jobs:
           cd /tmp
           wget https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip
           unzip build-wrapper-linux-x86.zip
+
+      - name: Download Conan package manager.
+        run: |
+           pip3 install conan
+           export PATH=$PATH:/home/runner/.local/bin
+           conan --version
 
       - name: build with build-wrapper
         run: |

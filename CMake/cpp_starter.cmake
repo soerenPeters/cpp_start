@@ -89,6 +89,21 @@ if(CS_USE_MPI)
 endif()
 
 
+# run conan install
+# find_program(conan conan)
+# if(NOT EXISTS ${conan})
+#     message(FATAL_ERROR "Conan not found on the system. Please install conan from here: https://conan.io/downloads.html")
+# endif()
+
+# execute_process(COMMAND ${conan} install ${CMAKE_CURRENT_SOURCE_DIR}
+#                 OUTPUT_VARIABLE output
+#                 RESULT_VARIABLE result)
+# message(STATUS "conan output:" ${output})
+
+# if(NOT ${result} EQUAL 0)
+#     message(FATAL_ERROR "conan install command failed with error code: ${result}")
+# endif()
+
 
 # conan
 if(NOT EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
@@ -118,7 +133,12 @@ if(CS_BUILD_UNIT_TESTS)
     include(Catch)
     include(GoogleTest)
 
-    list(APPEND UNIT_TESTS_LIBRARIES gmock_main gmock gtest)
+    list(APPEND CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
+    list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
+
+    find_package(Catch2 REQUIRED)
+
+    list(APPEND UNIT_TESTS_LIBRARIES gmock_main gmock gtest Catch2::Catch2)
 
     enable_testing()
 

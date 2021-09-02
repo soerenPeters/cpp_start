@@ -15,7 +15,7 @@ namespace cpp_start
 class BOOST_EXAMPLE_EXPORT Boost_example
 {
 public:
-    std::string getCurrentPath() const;
+    bool match(std::string word, std::string regex) const;
 };
 
 }

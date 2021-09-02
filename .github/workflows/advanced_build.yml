@@ -9,6 +9,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Download Conan package manager.
+        run: |
+           pip3 install conan
+           export PATH=$PATH:/home/runner/.local/bin
+           conan --version
+
       - name: configure
         run: >
           mkdir build && cd build && cmake ..
@@ -27,6 +33,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Download Conan package manager.
+        run: |
+           pip3 install conan
+           export PATH=$PATH:/home/runner/.local/bin
+           conan --version
 
       - name: configure
         run: >
@@ -49,6 +61,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Download Conan package manager.
+        run: |
+           pip3 install conan
+           export PATH=$PATH:/home/runner/.local/bin
+           conan --version
+
       - name: configure
         run: >
           mkdir build && cd build && cmake ..
@@ -66,6 +84,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Download Conan package manager.
+        run: |
+           pip3 install conan
+           export PATH=$PATH:/home/runner/.local/bin
+           conan --version
 
       - name: configure
         run: >

@@ -14,14 +14,9 @@ jobs:
 
       - name: Download Conan package manager.
         run: |
-           pwd
            pip3 install conan
            export PATH=$PATH:/home/runner/.local/bin
-           echo $PATH
            conan --version
-           ls
-      - name: install conan packages
-        run: mkdir build && cd build && conan install ..
 
       - name: configure
         run: cmake --version && cd build && cmake .. -DCS_BUILD_WARNINGS_AS_ERRORS=ON
@@ -38,6 +33,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Download Conan package manager.
+        run: |
+           pip3 install conan
+           export PATH=$PATH:/home/runner/.local/bin
+           conan --version
+
       - name: configure
         run: cmake --version && mkdir build && cd build && cmake .. -DCS_BUILD_WARNINGS_AS_ERRORS=ON
 
@@ -52,6 +53,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Download Conan package manager.
+        run: |
+           pip3 install conan
+           export PATH=$PATH:/home/runner/.local/bin
+           conan --version
 
       - name: configure
         run: cmake --version && mkdir build && cd build && cmake .. -DCS_BUILD_WARNINGS_AS_ERRORS=ON

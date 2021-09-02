@@ -9,13 +9,11 @@
 #include "Boost_example.h"
 
 
-TEST(BoostExampleTest, checkThatCurrentPath_isNotEmpty)
+TEST(BoostExampleTest, chechBoostRegex)
 {
     cpp_start::Boost_example sut;
 
-    const auto path = sut.getCurrentPath();
+    const auto match = sut.match("Boost Libraries", "\\w+\\s\\w+");
 
-    spdlog::info("Current path: {0}", path);
-
-    ASSERT_THAT(path, testing::StrNe(""));
+    ASSERT_TRUE(match);
 }

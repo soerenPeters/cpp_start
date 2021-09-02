@@ -5,16 +5,16 @@
 #include "Boost_example.h"
 
 
-#include <boost/filesystem.hpp>
+#include <boost/regex.hpp>
 
 namespace cpp_start
 {
 
-std::string Boost_example::getCurrentPath() const
+bool Boost_example::match(std::string word, std::string regex) const
 {
-    const boost::filesystem::path full_path(boost::filesystem::current_path());
+    const boost::regex expression {regex};
 
-    return full_path.string();
+    return boost::regex_match(word, expression);
 }
 
 }
