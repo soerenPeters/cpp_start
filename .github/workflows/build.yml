@@ -19,7 +19,7 @@ jobs:
            conan --version
 
       - name: configure
-        run: cmake --version && cd build && cmake .. -DCS_BUILD_WARNINGS_AS_ERRORS=ON
+        run: cmake --version && mkdir build && cd build && cmake .. -DCS_BUILD_WARNINGS_AS_ERRORS=ON
 
       - name: build
         run: cmake --build build --config Debug
