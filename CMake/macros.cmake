@@ -155,7 +155,7 @@ macro(link_boost)
     #     add_definitions( -DBOOST_ALL_NO_LIB )
     # endif()
 
-    find_package(Boost ${ARG_VERSION})
+    find_package(Boost ${ARG_VERSION} COMPONENTS ${ARG_COMPONENTS})
 
     foreach(component ${ARG_COMPONENTS})
         list(APPEND PRIVATE_LINK Boost::${component})
@@ -259,8 +259,6 @@ function(_add_test)
 
 
     gtest_add_tests(TARGET ${test_name})
-
-    catch_discover_tests(${test_name})
 
     set_target_properties(${test_name} PROPERTIES FOLDER ${test_folder})
 

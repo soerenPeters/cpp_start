@@ -14,7 +14,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include(CMake/cpp_starter.cmake)
 
 
-add_subdirectory(src/catch_example)
 add_subdirectory(src/meta)
 add_subdirectory(src/boost_example)
 add_subdirectory(src/openmp_example)

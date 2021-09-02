@@ -130,15 +130,9 @@ if(CS_BUILD_UNIT_TESTS)
         list(APPEND CS_LINK_OPTIONS "--coverage")
     endif()
 
-    include(Catch)
     include(GoogleTest)
 
-    list(APPEND CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
-    list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
-
-    find_package(Catch2 REQUIRED)
-
-    list(APPEND UNIT_TESTS_LIBRARIES gmock_main gmock gtest Catch2::Catch2)
+    list(APPEND UNIT_TESTS_LIBRARIES gmock_main gmock gtest)
 
     enable_testing()
 

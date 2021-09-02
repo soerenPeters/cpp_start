@@ -1,7 +1,6 @@
 [requires]
 spdlog/1.9.2
 gtest/1.11.0
-catch2/2.13.7
 boost/1.76.0
 
 [generators]
