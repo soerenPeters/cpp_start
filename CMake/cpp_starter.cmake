@@ -90,19 +90,19 @@ endif()
 
 
 # run conan install
-find_program(conan conan)
-if(NOT EXISTS ${conan})
-    message(FATAL_ERROR "Conan not found on the system. Please install conan from here: https://conan.io/downloads.html")
-endif()
+# find_program(conan conan)
+# if(NOT EXISTS ${conan})
+#     message(FATAL_ERROR "Conan not found on the system. Please install conan from here: https://conan.io/downloads.html")
+# endif()
 
-execute_process(COMMAND ${conan} install ${CMAKE_CURRENT_SOURCE_DIR}
-                OUTPUT_VARIABLE output
-                RESULT_VARIABLE result)
-message(STATUS "conan output:" ${output})
+# execute_process(COMMAND ${conan} install ${CMAKE_CURRENT_SOURCE_DIR}
+#                 OUTPUT_VARIABLE output
+#                 RESULT_VARIABLE result)
+# message(STATUS "conan output:" ${output})
 
-if(NOT ${result} EQUAL 0)
-    message(FATAL_ERROR "conan install command failed with error code: ${result}")
-endif()
+# if(NOT ${result} EQUAL 0)
+#     message(FATAL_ERROR "conan install command failed with error code: ${result}")
+# endif()
 
 
 # conan
