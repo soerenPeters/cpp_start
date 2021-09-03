@@ -19,7 +19,7 @@ jobs:
            conan --version
 
       - name: Execute conan
-        run: mkdir build && cd build && conan install ..
+        run: mkdir build && cd build && conan install .. -s compiler.libcxx=libstdc++11 
 
       - name: configure
         run: cmake --version && cd build && cmake .. -DCS_BUILD_WARNINGS_AS_ERRORS=ON
