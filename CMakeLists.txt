@@ -1,6 +1,15 @@
 cmake_minimum_required(VERSION 3.15..3.21 FATAL_ERROR)
 
-project(CppStart CXX)
+project(CppStart
+        VERSION 1.0.0
+        DESCRIPTION "C++ Starter project"
+        HOMEPAGE_URL "https://github.com/soerenPeters/cpp_start"
+        LANGUAGES CXX)
+
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release)
+endif()
+message(STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

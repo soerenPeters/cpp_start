@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 3.15)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER ".cmake")
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # options
 option(CMAKE_VERBOSE_OUTPUT "Enable additional CMake output per target." ON)
@@ -104,13 +105,19 @@ endif()
 #     message(FATAL_ERROR "conan install command failed with error code: ${result}")
 # endif()
 
+list(APPEND CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
+
 
 # conan
 if(NOT EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
     MESSAGE(FATAL_ERROR "conanbuildinfo.cmake not found. Probably missing: conan install .. ")
 endif()
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup(KEEP_RPATHS)
+conan_basic_setup()
+
+conan_define_targets()
+conan_set_rpath()
 
 if(APPLE)
     set(CMAKE_INSTALL_RPATH "@executable_path/../lib")
@@ -133,6 +140,9 @@ if(CS_BUILD_UNIT_TESTS)
     include(GoogleTest)
 
     list(APPEND UNIT_TESTS_LIBRARIES gmock_main gmock gtest)
+    if(UNIX AND NOT APPLE)
+    list(APPEND UNIT_TESTS_LIBRARIES pthread)
+    endif()
 
     enable_testing()
 

@@ -333,8 +333,8 @@ function(_add_target)
         target_link_libraries(${ARG_NAME} PRIVATE ${ARG_PRIVATE_LINK})
     endif()
 
-    # link spdlog (spdlog requires fmt)
-    target_link_libraries(${ARG_NAME} PRIVATE spdlog fmt)
+    # link spdlog
+    target_link_libraries(${ARG_NAME} PRIVATE CONAN_PKG::spdlog)
 
     status_lib("additional compiler flags CXX: ${CS_COMPILER_FLAGS_CXX}")
     status_lib("additional compiler flags CXX DEBUG: ${CS_COMPILER_FLAGS_CXX_DEBUG}")
