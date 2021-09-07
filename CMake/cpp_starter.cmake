@@ -90,29 +90,41 @@ if(CS_USE_MPI)
 endif()
 
 
-# run conan install
-# find_program(conan conan)
-# if(NOT EXISTS ${conan})
-#     message(FATAL_ERROR "Conan not found on the system. Please install conan from here: https://conan.io/downloads.html")
-# endif()
 
-# execute_process(COMMAND ${conan} install ${CMAKE_CURRENT_SOURCE_DIR}
-#                 OUTPUT_VARIABLE output
-#                 RESULT_VARIABLE result)
-# message(STATUS "conan output:" ${output})
-
-# if(NOT ${result} EQUAL 0)
-#     message(FATAL_ERROR "conan install command failed with error code: ${result}")
-# endif()
-
+# conan
 list(APPEND CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 
-
-# conan
-if(NOT EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-    MESSAGE(FATAL_ERROR "conanbuildinfo.cmake not found. Probably missing: conan install .. ")
+if(NOT EXISTS "${CMAKE_BINARY_DIR}/conan.cmake")
+  message(STATUS "Downloading conan.cmake from https://github.com/conan-io/cmake-conan")
+  file(DOWNLOAD "https://raw.githubusercontent.com/conan-io/cmake-conan/v0.16.1/conan.cmake"
+                "${CMAKE_BINARY_DIR}/conan.cmake"
+                EXPECTED_HASH SHA256=396e16d0f5eabdc6a14afddbcfff62a54a7ee75c6da23f32f7a31bc85db23484
+                TLS_VERIFY ON)
 endif()
+
+include(${CMAKE_BINARY_DIR}/conan.cmake)
+
+    message(STATUS "COMPILER " ${CMAKE_CXX_COMPILER})
+    message(STATUS "COMPILER " ${CMAKE_CXX_COMPILER_ID})
+    message(STATUS "VERSION " ${CMAKE_CXX_COMPILER_VERSION})
+    message(STATUS "FLAGS " ${CMAKE_LANG_FLAGS})
+    message(STATUS "LIB ARCH " ${CMAKE_CXX_LIBRARY_ARCHITECTURE})
+    message(STATUS "BUILD TYPE " ${CMAKE_BUILD_TYPE})
+    message(STATUS "GENERATOR " ${CMAKE_GENERATOR})
+    message(STATUS "GENERATOR WIN64 " ${CMAKE_CL_64})
+
+conan_cmake_autodetect(settings)
+
+message(STATUS "Conan settings: ${settings}")
+
+
+conan_cmake_install(PATH_OR_REFERENCE ${CMAKE_CURRENT_SOURCE_DIR}
+                    BUILD missing
+                    REMOTE conan-center
+                    SETTINGS ${settings})
+
+
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
@@ -124,7 +136,8 @@ if(APPLE)
 else()
     set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
 endif()
-set(CMAKE_BUILD_WITH_INSTALL_RPATH ON) # <-- this is the line which is missing in the Conan documentation!
+
+set(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
 
 message(STATUS "conan libraries found: ${CONAN_LIBS}")
 
